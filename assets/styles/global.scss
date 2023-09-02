@@ -1,0 +1,15 @@
+html {
+}
+body {
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+  @apply text-slate-900;
+
+}
+
+#__nuxt {
+  height: 100%;
+  position: relative;
+}
