@@ -1,5 +1,5 @@
 <template>
-  <n-button size="large">
+  <n-button size="large" block>
     <slot />
   </n-button>
 </template>

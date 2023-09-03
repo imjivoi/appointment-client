@@ -1,7 +1,6 @@
 <template>
   <vue-final-modal
-    classes="modal-container pt-16  "
-    content-class="modal-box w-full max-w-full sm:max-w-[600px] mx-auto bg-white py-6 px-4 sm:px-8 overflow-hidden"
+    content-class="modal-box w-full max-w-full sm:max-w-[600px] mx-auto bg-white mt-16 py-6 px-4 sm:px-8 overflow-hidden"
     :lock-scroll="true"
     overlay-transition="vfm-fade"
     content-transition="vfm-fade"
@@ -21,6 +20,7 @@
 
 <script lang="ts" setup>
 import { VueFinalModal } from 'vue-final-modal'
+import 'vue-final-modal/style.css'
 </script>
 
 <style lang="scss">

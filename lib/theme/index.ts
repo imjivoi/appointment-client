@@ -7,6 +7,9 @@ const themeOverrides: GlobalThemeOverrides = {
     primaryColorPressed: '#171717',
     borderRadius: '10px',
   },
+  DatePicker: {
+    itemBorderRadius: '5px'
+  }
 }
 
 export { themeOverrides }

@@ -1,5 +1,5 @@
 <template>
-  <NConfigProvider inline-theme-disabled :theme-overrides="themeOverrides" preflight-style-disabled>
+  <NConfigProvider :locale="esAR" :date-locale="dateEsAR" inline-theme-disabled :theme-overrides="themeOverrides" preflight-style-disabled>
     <NMessageProvider placement="top">
       <NuxtLayout>
         <NuxtPage />
@@ -10,7 +10,7 @@
   <NuxtLoadingIndicator />
 </template>
 <script setup>
-import { NConfigProvider, NMessageProvider } from 'naive-ui'
+import { NConfigProvider, NMessageProvider, esAR, dateEsAR } from 'naive-ui'
 import { ModalsContainer } from 'vue-final-modal'
 
 import { themeOverrides } from '@/lib'

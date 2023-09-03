@@ -1,12 +1,6 @@
 <template>
-  <n-tabs @update:value="activeTab = $event" type="line">
-    <n-tab name="1">Riders On the Storm</n-tab>
-    <n-tab name="2">Light My Fire</n-tab>
-    <n-tab name="3">Berak On Through</n-tab>
-  </n-tabs>
+  <time-slot-chose :time-slots="timeSlots" />
 </template>
 <script setup lang="ts">
-import { NButton, NTabs, NTab } from 'naive-ui'
-
-const activeTab = ref("1")
+const timeSlots = ['2023-09-04T13:00:00Z', '2023-09-04T15:00:00Z', '2023-09-06T13:00:00Z', '2023-09-08T15:00:00Z']
 </script>

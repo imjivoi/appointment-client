@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/styles/index.scss'],
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: ['@nuxtjs/tailwindcss', 'nuxt-icon'],
   tailwindcss: {
     configPath: './tailwind.config.ts',
     cssPath: '~/assets/styles/tailwind.css',
@@ -35,6 +35,9 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: process.env.NODE_ENV === 'development' ? ['naive-ui', 'vueuc', 'date-fns-tz/esm/formatInTimeZone'] : [],
     },
+  },
+  experimental: {
+    typedPages: true
   },
   devtools: { enabled: false },
 })
