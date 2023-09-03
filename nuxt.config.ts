@@ -35,9 +35,22 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: process.env.NODE_ENV === 'development' ? ['naive-ui', 'vueuc', 'date-fns-tz/esm/formatInTimeZone'] : [],
     },
+    vue: {
+      script: {
+        defineModel: true,
+        propsDestructure: true,
+      },
+    },
+  },
+  hooks: {
+    'vite:extendConfig': (config, { isClient, isServer }) => {
+      if (isClient) {
+        config.vue = 'vue/dist/vue.esm-bundler'
+      }
+    },
   },
   experimental: {
-    typedPages: true
+    typedPages: true,
   },
   devtools: { enabled: false },
 })

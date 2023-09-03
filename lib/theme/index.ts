@@ -8,8 +8,8 @@ const themeOverrides: GlobalThemeOverrides = {
     borderRadius: '10px',
   },
   DatePicker: {
-    itemBorderRadius: '5px'
-  }
+    itemBorderRadius: '5px',
+  },
 }
 
 export { themeOverrides }

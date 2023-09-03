@@ -2,5 +2,11 @@
 import { Config } from 'tailwindcss'
 export default <Partial<Config>>{
   darkMode: 'class',
-  theme: {},
+  theme: {
+    extend: {
+      colors: {
+        primary: '#1c1c1c',
+      },
+    },
+  },
 }
