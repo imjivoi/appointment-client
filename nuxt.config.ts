@@ -20,10 +20,29 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/styles/index.scss'],
-  modules: ['@nuxtjs/tailwindcss', 'nuxt-icon'],
+  modules: ['@nuxtjs/tailwindcss', 'nuxt-icon', 'nuxt-viewport', '@vueuse/nuxt'],
+  viewport: {
+    breakpoints: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      '2xl': 1536,
+    },
+
+    defaultBreakpoints: {
+      desktop: 'lg',
+      mobile: 'xs',
+      tablet: 'md',
+    },
+
+    fallbackBreakpoint: 'lg',
+  },
   tailwindcss: {
     configPath: './tailwind.config.ts',
     cssPath: '~/assets/styles/tailwind.css',
+    exposeConfig: true,
   },
   build: {
     transpile:
@@ -40,13 +59,6 @@ export default defineNuxtConfig({
         defineModel: true,
         propsDestructure: true,
       },
-    },
-  },
-  hooks: {
-    'vite:extendConfig': (config, { isClient, isServer }) => {
-      if (isClient) {
-        config.vue = 'vue/dist/vue.esm-bundler'
-      }
     },
   },
   experimental: {

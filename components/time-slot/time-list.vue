@@ -1,6 +1,6 @@
 <template>
   <div>
-    <n-scrollbar class="max-h-[180px]">
+    <n-scrollbar class="max-h-[180px] pr-4">
       <ul class="grid grid-cols-3 gap-4">
         <li v-for="(timeSlot, idx) in timeSlots" :key="idx">
           <time-slot-time-item :active="timeSlot === modelValue" @click="$emit('update:modelValue', timeSlot)">

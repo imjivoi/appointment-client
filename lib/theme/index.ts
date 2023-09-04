@@ -1,11 +1,12 @@
 import { GlobalThemeOverrides } from 'naive-ui'
 
+import { theme } from '#tailwind-config'
 const themeOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#1c1c1c',
-    primaryColorHover: '#2f2f2f',
-    primaryColorPressed: '#171717',
-    borderRadius: '10px',
+    primaryColor: theme.colors.primary[500],
+    primaryColorHover: theme.colors.primary[400],
+    primaryColorPressed: theme.colors.primary[600],
+    borderRadius: theme.borderRadius.lg,
   },
   DatePicker: {
     itemBorderRadius: '5px',
