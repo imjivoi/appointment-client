@@ -15,6 +15,17 @@
         </ul>
       </div> -->
       <div>
+        <n-popover trigger="click" :show-arrow="false">
+          <template #trigger>
+            <n-button type="primary">Ingresar</n-button>
+          </template>
+          <n-button type="error" secondary>
+            <template #icon>
+              <Icon name="grommet-icons:google" class="text-red-600" />
+            </template>
+            <span class="ml-2 font-medium">Continuar con google</span>
+          </n-button>
+        </n-popover>
         <!-- <div class="flex gap-2">
           <select v-model="currentLocale" class="select">
             <option v-for="(locale, idx) in locales" :key="idx">{{ locale.code }}</option>
@@ -34,10 +45,7 @@
   </header>
 </template>
 <script lang="ts" setup>
-
-
-// ** Hardcode */
-
+import { NPopover, NButton } from 'naive-ui'
 </script>
 <style scoped>
 .logo {
