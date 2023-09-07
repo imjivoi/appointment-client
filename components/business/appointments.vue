@@ -20,9 +20,9 @@
 
     <div class="mt-4 flex">
       <n-pagination
-        class="ml-auto"
         v-model:page="page"
         v-model:page-size="pageSize"
+        class="ml-auto"
         :page-count="100"
         :page-sizes="[10, 20, 30, 40]"
         :page-slot="7"
@@ -36,7 +36,7 @@ import { NPagination, NDatePicker, NButton, NInput, NInputGroup } from 'naive-ui
 
 const viewport = useViewport()
 
-const date = ref(startOfToday())
+const date = ref(startOfToday().getTime())
 const emailOrName = ref('')
 
 const page = ref(2)
