@@ -1,13 +1,13 @@
 <template>
   <vue-final-modal
-    content-class="modal-box w-full max-w-full sm:max-w-[600px] mx-auto bg-white mt-16 py-6 px-4 sm:px-8 overflow-hidden"
+    content-class="modal-box w-full max-w-full sm:max-w-[700px] mx-auto bg-white mt-16 py-6 px-4 sm:px-8 overflow-hidden"
     :lock-scroll="true"
     overlay-transition="vfm-fade"
     content-transition="vfm-fade"
     teleport-to="#__nuxt"
   >
-    <div class="modal__title text-center font-bold text-2xl">
-      <slot name="title"></slot>
+    <div>
+      <slot name="header"></slot>
     </div>
     <div v-if="$slots.default" class="modal__content mt-8">
       <slot />
