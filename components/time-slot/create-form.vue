@@ -23,11 +23,17 @@
         <n-skeleton v-for="i in 7" :key="i" height="50px" />
       </div>
     </template>
+    <div class="flex items-center justify-center gap-4">
+      <n-button type="primary" size="large" round @click="validate">Crear</n-button>
+      <n-button size="large" round @click="$emit('update:modelValue')">Cancelar</n-button>
+    </div>
   </n-form>
 </template>
 <script setup lang="ts">
 import { setHours, startOfDay } from 'date-fns/esm'
-import { NForm, NFormItem, FormInst, NInputNumber, NSkeleton } from 'naive-ui'
+import { NForm, NFormItem, FormInst, NInputNumber, NSkeleton, useMessage, NButton } from 'naive-ui'
+
+const message = useMessage()
 
 const weekDays = {
   monday: {
@@ -157,11 +163,17 @@ const formValue = reactive({
   timeSlots: [] as typeof TIME_SLOTS_DEFAULT,
 })
 
-async function validate() {
-  try {
-    await formRef.value?.validate()
-    console.log('valid')
-  } catch (error) {}
+function validate() {
+  formValue.timeSlots.forEach((timeSlot) => {
+    if (timeSlot.options.active) {
+      timeSlot.options.time.forEach((time) => {
+        if (time.startAt >= time.endAt) {
+          message.error('La hora de inicio debe ser menor a la hora de fin')
+          throw new Error('La hora de inicio debe ser menor a la hora de fin')
+        }
+      })
+    }
+  })
 }
 
 onMounted(() => {
