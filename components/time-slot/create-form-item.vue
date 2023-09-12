@@ -56,6 +56,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { setHours, startOfDay } from 'date-fns/esm'
 import { NButton, NFormItem, NTimePicker, NSwitch } from 'naive-ui'
 
 const props = defineProps<{
@@ -69,8 +70,8 @@ const props = defineProps<{
 const active = defineModel<boolean>('active')
 const time = defineModel<{ startAt: number; endAt: number }[]>('time')
 
-const START_AT_DEFAULT = 1694347200171
-const END_AT_DEFAULT = 1694376000171
+const START_AT_DEFAULT = setHours(startOfDay(Date.now()), 9).getTime()
+const END_AT_DEFAULT = setHours(startOfDay(Date.now()), 17).getTime()
 
 function addTime() {
   time.value!.push({

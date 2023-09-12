@@ -7,129 +7,27 @@
         </template>
       </n-input-number>
     </n-form-item>
-    <time-slot-create-form-item
-      v-for="(timeSlot, timeSlotIdx) in formValue.timeSlots"
-      :key="timeSlotIdx"
-      v-model:active="timeSlot.options.active"
-      v-model:time="timeSlot.options.time"
-      :week-day="weekDays[timeSlot.weekDay]"
-      :idx="timeSlotIdx"
-    ></time-slot-create-form-item>
-    <!-- <template v-for="(timeSlot, timeSlotIdx) in formValue.timeSlots" :key="timeSlotIdx">
-      <div class="flex gap-4 justify-center">
-        <div class="w-24 mt-2 font-medium">
-          {{ weekDays[timeSlot.weekDay].label }}
-        </div>
-        <n-form-item class="block">
-          <n-switch v-model:value="timeSlot.options.active">
-            <template #checked>Activo</template>
-            <template #unchecked>Inactivo</template>
-          </n-switch>
-        </n-form-item>
-        <div class="grid ml-10">
-          <div v-for="(timeItem, idx) in timeSlot.options.time" :key="idx" class="flex gap-4">
-            <n-form-item
-              :path="`timeSlots[${timeSlotIdx}].options.time[${idx}].startAt`"
-              class="w-32 block"
-              :rule="{
-                validator: (rule, value) => {
-                  return value < timeItem.endAt
-                },
-                trigger: 'change',
-                message: 'La hora de inicio debe ser menor a la hora de fin',
-              }"
-            >
-              <n-time-picker
-                format="HH:mm"
-                v-model:value="timeItem.startAt"
-                time-zone="America/Argentina/Buenos_Aires"
-                :disabled="!timeSlot.options.active"
-              />
-            </n-form-item>
-            <span class="mt-2">hasta</span>
-            <n-form-item
-              :path="`timeSlots[${timeSlotIdx}].options.time[${idx}].endAt`"
-              class="w-32 block"
-              :rule="{
-                validator: (rule, value) => {
-                  return timeItem.startAt < value
-                },
-                trigger: 'change',
-                message: 'La hora de fin debe ser mayor a la hora de inicio',
-              }"
-            >
-              <n-time-picker v-model:value="timeItem.endAt" :disabled="!timeSlot.options.active" />
-            </n-form-item>
-            <div class="mt-1">
-              <n-button
-                v-if="idx === 0"
-                circle
-                size="tiny"
-                type="info"
-                secondary
-                :disabled="!timeSlot.options.active"
-                @click="addTime(weekDay)"
-              >
-                <template #icon>
-                  <Icon name="ic:round-plus" />
-                </template>
-              </n-button>
-              <n-button
-                v-if="idx !== 0"
-                circle
-                size="tiny"
-                type="error"
-                secondary
-                :disabled="!formValue.timeSlots[weekDay].active"
-                @click="removeTime(weekDay, idx)"
-              >
-                <template #icon>
-                  <Icon name="ic:baseline-delete" />
-                </template>
-              </n-button>
-            </div>
-          </div>
-        </div>
+
+    <template v-if="formValue.timeSlots.length">
+      <time-slot-create-form-item
+        v-for="(timeSlot, timeSlotIdx) in formValue.timeSlots"
+        :key="timeSlotIdx"
+        v-model:active="timeSlot.options.active"
+        v-model:time="timeSlot.options.time"
+        :week-day="weekDays[timeSlot.weekDay]"
+        :idx="timeSlotIdx"
+      ></time-slot-create-form-item>
+    </template>
+    <template v-else-if="isInitiatingForm">
+      <div class="space-y-2">
+        <n-skeleton v-for="i in 7" :key="i" height="50px" />
       </div>
-    </template> -->
+    </template>
   </n-form>
 </template>
 <script setup lang="ts">
-import { addMonths, eachDayOfInterval } from 'date-fns/esm'
-import {
-  NButton,
-  NDatePicker,
-  NTimePicker,
-  NForm,
-  NFormItem,
-  FormInst,
-  NSelect,
-  FormRules,
-  NCheckbox,
-  NCheckboxGroup,
-  NDivider,
-  NSwitch,
-  NInputNumber,
-  NInput,
-} from 'naive-ui'
-
-const services = [
-  {
-    id: '1',
-    label: 'Corte de pelo',
-    value: '1',
-  },
-  {
-    id: '2',
-    label: 'Corte de barba',
-    value: '2',
-  },
-  {
-    id: '3',
-    label: 'Corte de pelo y barba',
-    value: '3',
-  },
-]
+import { setHours, startOfDay } from 'date-fns/esm'
+import { NForm, NFormItem, FormInst, NInputNumber, NSkeleton } from 'naive-ui'
 
 const weekDays = {
   monday: {
@@ -162,179 +60,102 @@ const weekDays = {
   },
 }
 
-const START_AT_DEFAULT = 1694347200171
-const END_AT_DEFAULT = 1694376000171
+const START_AT_DEFAULT = setHours(startOfDay(Date.now()), 9).getTime()
+const END_AT_DEFAULT = setHours(startOfDay(Date.now()), 17).getTime()
+const TIME_SLOTS_DEFAULT = [
+  {
+    weekDay: 'monday',
+    options: {
+      active: true,
+      time: [
+        {
+          startAt: START_AT_DEFAULT,
+          endAt: END_AT_DEFAULT,
+        },
+      ],
+    },
+  },
+  {
+    weekDay: 'tuesday',
+    options: {
+      active: true,
+      time: [
+        {
+          startAt: START_AT_DEFAULT,
+          endAt: END_AT_DEFAULT,
+        },
+      ],
+    },
+  },
+  {
+    weekDay: 'wednesday',
+    options: {
+      active: true,
+      time: [
+        {
+          startAt: START_AT_DEFAULT,
+          endAt: END_AT_DEFAULT,
+        },
+      ],
+    },
+  },
+  {
+    weekDay: 'thursday',
+    options: {
+      active: true,
+      time: [
+        {
+          startAt: START_AT_DEFAULT,
+          endAt: END_AT_DEFAULT,
+        },
+      ],
+    },
+  },
+  {
+    weekDay: 'friday',
+    options: {
+      active: true,
+      time: [
+        {
+          startAt: START_AT_DEFAULT,
+          endAt: END_AT_DEFAULT,
+        },
+      ],
+    },
+  },
+  {
+    weekDay: 'saturday',
+    options: {
+      active: false,
+      time: [
+        {
+          startAt: START_AT_DEFAULT,
+          endAt: END_AT_DEFAULT,
+        },
+      ],
+    },
+  },
+  {
+    weekDay: 'sunday',
+    options: {
+      active: false,
+      time: [
+        {
+          startAt: START_AT_DEFAULT,
+          endAt: END_AT_DEFAULT,
+        },
+      ],
+    },
+  },
+]
 
 const formRef = ref<FormInst | null>(null)
-// const formValue = ref({
-//   appointmentDuration: 15,
-//   timeSlots: {
-//     monday: {
-//       active: true,
-//       time: [
-//         {
-//           startAt: START_AT_DEFAULT,
-//           endAt: END_AT_DEFAULT,
-//         },
-//       ],
-//     },
-//     tuesday: {
-//       active: true,
-//       time: [
-//         {
-//           startAt: START_AT_DEFAULT,
-//           endAt: END_AT_DEFAULT,
-//         },
-//       ],
-//     },
-//     wednesday: {
-//       active: true,
-//       time: [
-//         {
-//           startAt: START_AT_DEFAULT,
-//           endAt: END_AT_DEFAULT,
-//         },
-//       ],
-//     },
-//     thursday: {
-//       active: true,
-//       time: [
-//         {
-//           startAt: START_AT_DEFAULT,
-//           endAt: END_AT_DEFAULT,
-//         },
-//       ],
-//     },
-//     friday: {
-//       active: true,
-//       time: [
-//         {
-//           startAt: START_AT_DEFAULT,
-//           endAt: END_AT_DEFAULT,
-//         },
-//       ],
-//     },
-//     saturday: {
-//       active: false,
-//       time: [
-//         {
-//           startAt: START_AT_DEFAULT,
-//           endAt: END_AT_DEFAULT,
-//         },
-//       ],
-//     },
-//     sunday: {
-//       active: false,
-//       time: [
-//         {
-//           startAt: START_AT_DEFAULT,
-//           endAt: END_AT_DEFAULT,
-//         },
-//       ],
-//     },
-//   } as Record<string, any>,
-// })
+const isInitiatingForm = ref(true)
 
 const formValue = reactive({
   appointmentDuration: 15,
-  timeSlots: [
-    {
-      weekDay: 'monday',
-      options: {
-        active: ref(true),
-        time: [
-          {
-            startAt: START_AT_DEFAULT,
-            endAt: END_AT_DEFAULT,
-          },
-        ],
-      },
-    },
-    {
-      weekDay: 'tuesday',
-      options: {
-        active: ref(true),
-        time: [
-          {
-            startAt: START_AT_DEFAULT,
-            endAt: END_AT_DEFAULT,
-          },
-        ],
-      },
-    },
-    {
-      weekDay: 'wednesday',
-      options: {
-        active: ref(true),
-        time: [
-          {
-            startAt: START_AT_DEFAULT,
-            endAt: END_AT_DEFAULT,
-          },
-        ],
-      },
-    },
-    {
-      weekDay: 'thursday',
-      options: {
-        active: ref(true),
-        time: [
-          {
-            startAt: START_AT_DEFAULT,
-            endAt: END_AT_DEFAULT,
-          },
-        ],
-      },
-    },
-    {
-      weekDay: 'friday',
-      options: {
-        active: ref(true),
-        time: [
-          {
-            startAt: START_AT_DEFAULT,
-            endAt: END_AT_DEFAULT,
-          },
-        ],
-      },
-    },
-    {
-      weekDay: 'saturday',
-      options: {
-        active: ref(false),
-        time: [
-          {
-            startAt: START_AT_DEFAULT,
-            endAt: END_AT_DEFAULT,
-          },
-        ],
-      },
-    },
-    {
-      weekDay: 'sunday',
-      options: {
-        active: ref(false),
-        time: [
-          {
-            startAt: START_AT_DEFAULT,
-            endAt: END_AT_DEFAULT,
-          },
-        ],
-      },
-    },
-  ],
+  timeSlots: [] as typeof TIME_SLOTS_DEFAULT,
 })
-
-function addTime(weekDay: string) {
-  formValue.value.timeSlots[weekDay].time.push({
-    startAt: START_AT_DEFAULT,
-    endAt: END_AT_DEFAULT,
-  })
-}
-
-function removeTime(weekDay: string, idx: number) {
-  formValue.value.timeSlots[weekDay].time.splice(idx, 1)
-}
 
 async function validate() {
   try {
@@ -342,4 +163,12 @@ async function validate() {
     console.log('valid')
   } catch (error) {}
 }
+
+onMounted(() => {
+  nextTick(async () => {
+    await sleep(500)
+    formValue.timeSlots = TIME_SLOTS_DEFAULT
+    isInitiatingForm.value = false
+  })
+})
 </script>
