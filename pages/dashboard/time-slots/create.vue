@@ -1,3 +1,3 @@
 <template>
-  <time-slot-create />
+  <time-slot-create-form />
 </template>

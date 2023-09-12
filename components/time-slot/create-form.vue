@@ -1,21 +1,98 @@
 <template>
-  <ui-modal>
-    <template #header>
-      <div class="text-center">
-        <h2 class="text-2xl font-bold">Horario</h2>
-        <p class="text-gray-400 mt-2">Configura horario para tu servicio</p>
+  <n-form ref="formRef" :model="formValue">
+    <n-form-item label="Duracion de turno" class="max-w-[150px]">
+      <n-input-number v-model:value="formValue.appointmentDuration" min="1" :show-button="false">
+        <template #suffix>
+          <span>min</span>
+        </template>
+      </n-input-number>
+    </n-form-item>
+    <time-slot-create-form-item
+      v-for="(timeSlot, timeSlotIdx) in formValue.timeSlots"
+      :key="timeSlotIdx"
+      v-model:active="timeSlot.options.active"
+      v-model:time="timeSlot.options.time"
+      :week-day="weekDays[timeSlot.weekDay]"
+      :idx="timeSlotIdx"
+    ></time-slot-create-form-item>
+    <!-- <template v-for="(timeSlot, timeSlotIdx) in formValue.timeSlots" :key="timeSlotIdx">
+      <div class="flex gap-4 justify-center">
+        <div class="w-24 mt-2 font-medium">
+          {{ weekDays[timeSlot.weekDay].label }}
+        </div>
+        <n-form-item class="block">
+          <n-switch v-model:value="timeSlot.options.active">
+            <template #checked>Activo</template>
+            <template #unchecked>Inactivo</template>
+          </n-switch>
+        </n-form-item>
+        <div class="grid ml-10">
+          <div v-for="(timeItem, idx) in timeSlot.options.time" :key="idx" class="flex gap-4">
+            <n-form-item
+              :path="`timeSlots[${timeSlotIdx}].options.time[${idx}].startAt`"
+              class="w-32 block"
+              :rule="{
+                validator: (rule, value) => {
+                  return value < timeItem.endAt
+                },
+                trigger: 'change',
+                message: 'La hora de inicio debe ser menor a la hora de fin',
+              }"
+            >
+              <n-time-picker
+                format="HH:mm"
+                v-model:value="timeItem.startAt"
+                time-zone="America/Argentina/Buenos_Aires"
+                :disabled="!timeSlot.options.active"
+              />
+            </n-form-item>
+            <span class="mt-2">hasta</span>
+            <n-form-item
+              :path="`timeSlots[${timeSlotIdx}].options.time[${idx}].endAt`"
+              class="w-32 block"
+              :rule="{
+                validator: (rule, value) => {
+                  return timeItem.startAt < value
+                },
+                trigger: 'change',
+                message: 'La hora de fin debe ser mayor a la hora de inicio',
+              }"
+            >
+              <n-time-picker v-model:value="timeItem.endAt" :disabled="!timeSlot.options.active" />
+            </n-form-item>
+            <div class="mt-1">
+              <n-button
+                v-if="idx === 0"
+                circle
+                size="tiny"
+                type="info"
+                secondary
+                :disabled="!timeSlot.options.active"
+                @click="addTime(weekDay)"
+              >
+                <template #icon>
+                  <Icon name="ic:round-plus" />
+                </template>
+              </n-button>
+              <n-button
+                v-if="idx !== 0"
+                circle
+                size="tiny"
+                type="error"
+                secondary
+                :disabled="!formValue.timeSlots[weekDay].active"
+                @click="removeTime(weekDay, idx)"
+              >
+                <template #icon>
+                  <Icon name="ic:baseline-delete" />
+                </template>
+              </n-button>
+            </div>
+          </div>
+        </div>
       </div>
-    </template>
-    <div>
-      <time-slot-create-form/>
-    </div>
-    <template #footer>
-      <div class="flex items-center justify-center gap-4">
-        <n-button type="primary" size="large" round @click="validate">Crear</n-button>
-        <n-button size="large" round @click="$emit('update:modelValue')">Cancelar</n-button>
-      </div>
-    </template>
-  </ui-modal>
+    </template> -->
+  </n-form>
 </template>
 <script setup lang="ts">
 import { addMonths, eachDayOfInterval } from 'date-fns/esm'
@@ -33,6 +110,7 @@ import {
   NDivider,
   NSwitch,
   NInputNumber,
+  NInput,
 } from 'naive-ui'
 
 const services = [
@@ -175,7 +253,7 @@ const formValue = reactive({
     {
       weekDay: 'tuesday',
       options: {
-        active:  ref(true),
+        active: ref(true),
         time: [
           {
             startAt: START_AT_DEFAULT,
@@ -187,7 +265,7 @@ const formValue = reactive({
     {
       weekDay: 'wednesday',
       options: {
-        active:  ref(true),
+        active: ref(true),
         time: [
           {
             startAt: START_AT_DEFAULT,
@@ -199,7 +277,7 @@ const formValue = reactive({
     {
       weekDay: 'thursday',
       options: {
-        active:  ref(true),
+        active: ref(true),
         time: [
           {
             startAt: START_AT_DEFAULT,
@@ -211,7 +289,7 @@ const formValue = reactive({
     {
       weekDay: 'friday',
       options: {
-        active:  ref(true),
+        active: ref(true),
         time: [
           {
             startAt: START_AT_DEFAULT,
@@ -264,6 +342,4 @@ async function validate() {
     console.log('valid')
   } catch (error) {}
 }
-
-function prepateTimeSlots() {}
 </script>
