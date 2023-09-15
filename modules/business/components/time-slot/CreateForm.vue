@@ -9,14 +9,14 @@
     </n-form-item>
 
     <template v-if="formValue.timeSlots.length">
-      <time-slot-create-form-item
+      <business-time-slot-create-form-item
         v-for="(timeSlot, timeSlotIdx) in formValue.timeSlots"
         :key="timeSlotIdx"
         v-model:active="timeSlot.options.active"
         v-model:time="timeSlot.options.time"
         :week-day="weekDays[timeSlot.weekDay]"
         :idx="timeSlotIdx"
-      ></time-slot-create-form-item>
+      ></business-time-slot-create-form-item>
     </template>
     <template v-else-if="isInitiatingForm">
       <div class="space-y-2">

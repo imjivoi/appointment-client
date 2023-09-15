@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Config } from 'tailwindcss'
 export default <Partial<Config>>{
-  content: ['./components/**/*.vue', './layouts/**/*.vue', './pages/**/*.vue'],
+  content: ['./components/**/*.vue', './layouts/**/*.vue', './pages/**/*.vue', './modules/**/*.vue'],
   darkMode: 'class',
   theme: {
     extend: {

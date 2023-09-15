@@ -7,7 +7,7 @@
       </div>
     </template>
     <div>
-      <time-slot-create-form @update:modelValue="$emit('update:modelValue')" />
+      <business-time-slot-create-form @update:modelValue="$emit('update:modelValue')" />
     </div>
   </ui-modal>
 </template>

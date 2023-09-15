@@ -15,8 +15,12 @@
       <n-date-picker v-model:value="date" type="date" clearable />
       <n-button type="info" secondary round>Nuevo turno</n-button>
     </div>
-    <business-appointment-table v-if="viewport.isGreaterThan('sm')" />
-    <business-appointment-mobile v-else />
+    <appointment-table v-if="viewport.isGreaterThan('sm')" />
+    <template v-else>
+      <div class="grid gap-6">
+        <appointment-item />
+      </div>
+    </template>
 
     <div class="mt-4 flex">
       <n-pagination
