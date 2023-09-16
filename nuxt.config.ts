@@ -65,4 +65,11 @@ export default defineNuxtConfig({
     typedPages: true,
   },
   devtools: { enabled: false },
+  srcDir: 'src',
+  components: {
+    dirs: ['~/shared/ui'],
+  },
+  imports: {
+    dirs: ['~/shared/utils', '~/shared/lib'],
+  },
 })

@@ -1,15 +1,25 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Config } from 'tailwindcss'
 export default <Partial<Config>>{
-  content: ['./components/**/*.vue', './layouts/**/*.vue', './pages/**/*.vue', './modules/**/*.vue'],
+  content: ['./src/components/**/*.vue', './src/layouts/**/*.vue', './src/pages/**/*.vue', './src/modules/**/*.vue'],
   darkMode: 'class',
   theme: {
     extend: {
       colors: {
         primary: {
-          400: '#2f2f2f',
-          500: '#1c1c1c',
-          600: '#171717',
+          400: '#47dba9',
+          500: '#06d6a0',
+          600: '#04ba8b',
+        },
+        error: {
+          400: '#f45e7d',
+          500: '#ef476f',
+          600: '#d03d60',
+        },
+        warning: {
+          400: '#ffd679',
+          500: '#ffd166',
+          600: '#deb558',
         },
       },
     },

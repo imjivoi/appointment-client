@@ -1,3 +1,0 @@
-<template>
-  <business-create />
-</template>
