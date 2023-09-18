@@ -1,12 +1,11 @@
+import { createResolver } from '@nuxt/kit'
+
+const { resolve } = createResolver(import.meta.url)
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   app: {
     head: {
-      meta: [
-        {
-          name: 'naive-ui-style',
-        },
-      ],
       link: [
         {
           href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap',
@@ -19,7 +18,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-  css: ['~/assets/styles/index.scss'],
+  css: ['~/app/assets/styles/index.scss'],
   modules: ['@nuxtjs/tailwindcss', 'nuxt-icon', 'nuxt-viewport', '@vueuse/nuxt'],
   viewport: {
     breakpoints: {
@@ -41,19 +40,10 @@ export default defineNuxtConfig({
   },
   tailwindcss: {
     configPath: './tailwind.config.ts',
-    cssPath: '~/assets/styles/tailwind.css',
+    cssPath: './src/app/assets/styles/tailwind.css',
     exposeConfig: true,
   },
-  build: {
-    transpile:
-      process.env.NODE_ENV === 'production'
-        ? ['naive-ui', 'vueuc', '@css-render/vue3-ssr', '@juggle/resize-observer']
-        : ['@juggle/resize-observer'],
-  },
   vite: {
-    optimizeDeps: {
-      include: process.env.NODE_ENV === 'development' ? ['naive-ui', 'vueuc', 'date-fns-tz/esm/formatInTimeZone'] : [],
-    },
     vue: {
       script: {
         defineModel: true,
@@ -67,9 +57,19 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   srcDir: 'src',
   components: {
-    dirs: ['~/shared/ui'],
+    dirs: [resolve('./src/shared/components')],
   },
   imports: {
-    dirs: ['~/shared/utils', '~/shared/lib'],
+    autoImport: true,
+    dirs: [resolve('./src/shared/utils'), '~/shared/lib'],
+  },
+  alias: {
+    '#shared': resolve('./src/shared'),
+  },
+  dir: {
+    layouts: resolve('./src/app/layouts'),
+    middleware: resolve('./src/app/middleware'),
+    plugins: resolve('./src/app/plugins'),
+    assets: resolve('./src/app/assets'),
   },
 })

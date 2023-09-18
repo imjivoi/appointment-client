@@ -7,31 +7,33 @@
           https://sdfsfas/asfasdfsadffffffffffffffsssssssssssssssssssssssssss
         </a>
       </div>
-      <n-button type="primary" round size="tiny" @click="copyLink">
-        <template #icon>
-          <Icon name="ic:round-content-copy" />
-        </template>
-        Copiar
-      </n-button>
+      <ui-button size="sm" @click="copyLink">
+        <Icon name="ic:round-content-copy" class="mr-2" />
+        {{ isCopied ? 'Copiado!' : 'Copiar' }}
+      </ui-button>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { useClipboard } from '@vueuse/core'
-import { NButton, useMessage } from 'naive-ui'
+// import { NButton, useMessage } from 'naive-ui'
 
 const props = defineProps<{
   link: string
 }>()
 
-const message = useMessage()
+const isCopied = ref(false)
+// const message = useMessage()
 
 const { copy, copied } = useClipboard()
 
 const copyLink = async () => {
   await copy(props.link)
   if (copied.value) {
-    message.success('Copiado al portapapeles')
+    isCopied.value = true
+    await sleep(2000)
+    isCopied.value = false
+    // message.success('Copiado al portapapeles')
   }
 }
 </script>

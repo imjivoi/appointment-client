@@ -15,7 +15,7 @@
         </ul>
       </div> -->
       <div>
-        <button-link type="primary" to="/auth/login">Ingresar</button-link>
+        <ui-button :as="defineNuxtLink({})" to="/auth/login">Ingresar</ui-button>
       </div>
     </div>
   </header>

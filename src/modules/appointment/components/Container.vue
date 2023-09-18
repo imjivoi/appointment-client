@@ -4,39 +4,41 @@
       <h2 class="text-2xl font-bold">Turnos</h2>
     </div>
     <div class="mb-2 flex flex-col sm:flex-row gap-4">
-      <n-input-group>
-        <n-input v-model:value="emailOrName" placeholder="Buscar por email or nombre" />
-        <n-button>
-          <template #icon>
-            <Icon name="ic:outline-search" />
-          </template>
-        </n-button>
-      </n-input-group>
-      <n-date-picker v-model:value="date" type="date" clearable />
-      <n-button type="info" secondary round>Nuevo turno</n-button>
+      <div class="flex gap-2">
+        <ui-input v-model="emailOrName" placeholder="Buscar por email or nombre" />
+        <ui-button variant="ghost">
+          <Icon name="ic:outline-search" />
+        </ui-button>
+      </div>
+      <client-only>
+        <ui-popover>
+          <ui-popover-trigger>
+            <ui-button :variant="'outline'" :class="cn('justify-start text-left font-normal')">
+              <CalendarIcon class="mr-2 h-4 w-4" />
+              <span>{{ date ? formatDate(date, 'PP') : 'Pick a date' }}</span>
+            </ui-button>
+          </ui-popover-trigger>
+          <ui-popover-content class="w-auto p-0">
+            <ui-calendar v-model="date" />
+          </ui-popover-content>
+        </ui-popover>
+      </client-only>
+      <ui-button variant="secondary">Nuevo turno</ui-button>
     </div>
+
     <appointment-table v-if="viewport.isGreaterThan('sm')" />
     <template v-else>
       <div class="grid gap-6">
         <appointment-item />
       </div>
     </template>
-
-    <div class="mt-4 flex">
-      <n-pagination
-        v-model:page="page"
-        v-model:page-size="pageSize"
-        class="ml-auto"
-        :page-count="100"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-slot="7"
-      />
-    </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { startOfToday } from 'date-fns/esm'
-import { NPagination, NDatePicker, NButton, NInput, NInputGroup } from 'naive-ui'
+import { Calendar as CalendarIcon } from 'lucide-vue-next'
+
+import { cn } from '#shared/lib/utils'
 
 const viewport = useViewport()
 

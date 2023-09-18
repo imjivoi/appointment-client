@@ -1,30 +1,44 @@
 <template>
-  <div class="bg-gray-50 rounded-xl py-4 px-8 max-w-sm mx-auto">
-    <div class="mb-4">
-      <h2 class="font-bold text-xl text-center">Entrar</h2>
-    </div>
-    <div>
-      <n-form ref="formRef" :model="formValue" :rules="rules" :disabled="isLoading">
-        <n-form-item label="Email" path="email">
-          <n-input placeholder="" v-model:value="formValue.email" />
-        </n-form-item>
-        <n-form-item label="Contraseña" path="password">
-          <n-input placeholder="" v-model:value="formValue.password" type="password" />
-        </n-form-item>
+  <ui-card class="max-w-sm mx-auto">
+    <ui-card-header>
+      <ui-card-title class="font-bold text-xl text-center">Entrar</ui-card-title>
+    </ui-card-header>
+    <ui-card-content>
+      <form class="grid gap-4" @submit.prevent>
+        <div>
+          <ui-label>Correo</ui-label>
+          <ui-input v-model="form.email" />
+          <template v-if="$v.email.$error">
+            <div v-if="$v.email.required?.$invalid" class="text-red-500 mt-1">Por favor ingresa tu correo</div>
+            <div v-else-if="$v.email.email?.$invalid" class="text-red-500 mt-1">Por favor un correo valido</div>
+          </template>
+        </div>
+        <div>
+          <ui-label>Contraseña</ui-label>
+          <ui-input v-model="form.password" type="password" />
+          <template v-if="$v.password.$error">
+            <div v-if="$v.password.required?.$invalid" class="text-red-500 mt-1">Por favor ingresa tu contraseña</div>
+            <div v-else-if="$v.password.minLength?.$invalid" class="text-red-500 mt-1">
+              Contraseña debe contener al menos 6 digitos
+            </div>
+          </template>
+        </div>
 
         <div>
-          <n-button type="primary" block :loading="isLoading" @click="validate">Entrar</n-button>
+          <ui-button block :loading="isLoading" @click="validate">Entrar</ui-button>
           <p class="mt-4">
             Todavia no te registraste?
-            <nuxt-link class="text-primary-500" to="/auth/register">Registrarse</nuxt-link>
+            <nuxt-link class="text-blue-700 font-bold" to="/auth/register">Registrarse</nuxt-link>
           </p>
         </div>
-      </n-form>
-    </div>
-  </div>
+      </form>
+    </ui-card-content>
+  </ui-card>
 </template>
 <script lang="ts" setup>
-import { FormInst, useMessage, NForm, NFormItem, NInput, NButton } from 'naive-ui'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email, minLength } from '@vuelidate/validators'
+
 import { login } from '../api'
 
 definePageMeta({
@@ -32,29 +46,24 @@ definePageMeta({
 })
 
 const isLoading = ref(false)
-const message = useMessage()
+// const message = useMessage()
 
-const formRef = ref<FormInst | null>(null)
-const formValue = ref({
+const form = reactive({
   email: '',
   password: '',
 })
 
 const rules = {
-  email: [
-    { required: true, message: 'Por favor ingresa tu correo' },
-    { type: 'email', message: 'Por favor ingresa un correo valido' },
-  ],
-  password: [
-    { required: true, message: 'Por favor ingresa tu contraseña' },
-    { min: 6, message: 'Contraseña debe contener al menos 6 digitos' },
-  ],
+  email: { required, email },
+  password: { minLength: minLength(6), required },
 }
+
+const $v = useVuelidate(rules, form)
 
 async function validate() {
   try {
-    await formRef.value?.validate()
-    await login({ email: formValue.value.email, password: formValue.value.password })
+    await $v.value.$validate()
+    await login({ email: form.email, password: form.password })
   } catch (error) {}
 }
 </script>

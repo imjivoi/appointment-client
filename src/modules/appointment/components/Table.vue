@@ -1,45 +1,38 @@
 <template>
-  <n-table>
-    <thead>
-      <tr>
-        <th>Tiempo</th>
-        <th>Fecha</th>
-        <th>Cliente</th>
-        <th>Servicio</th>
-        <th>Estado</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(appointment, idx) in appointments" :key="idx">
-        <td class="font-medium">{{ appointment.time }}</td>
-        <td class="font-medium">{{ appointment.date }}</td>
-        <td class="font-medium">{{ appointment.client }}</td>
-        <td class="font-medium">{{ appointment.service }}</td>
-        <td class="font-medium">
-          <n-tag :bordered="false" type="warning" round>{{ appointment.status }}</n-tag>
-        </td>
-        <td>
+  <ui-table>
+    <ui-table-header>
+      <ui-table-row>
+        <ui-table-head class-name="w-[100px]">Tiempo</ui-table-head>
+        <ui-table-head>Fecha</ui-table-head>
+        <ui-table-head>Cliente</ui-table-head>
+        <ui-table-head>Servicio</ui-table-head>
+        <ui-table-head>Estatus</ui-table-head>
+        <ui-table-head></ui-table-head>
+      </ui-table-row>
+    </ui-table-header>
+    <ui-table-body>
+      <ui-table-row v-for="(appointment, idx) in appointments" :key="idx">
+        <ui-table-cell class="font-medium">
+          {{ appointment.time }}
+        </ui-table-cell>
+        <ui-table-cell>{{ appointment.date }}</ui-table-cell>
+        <ui-table-cell>{{ appointment.client }}</ui-table-cell>
+        <ui-table-cell>{{ appointment.service }}</ui-table-cell>
+        <ui-table-cell>
           <div class="flex gap-2">
-            <n-button size="tiny" circle type="info" secondary>
-              <template #icon>
-                <Icon name="ic:baseline-edit" />
-              </template>
-            </n-button>
-            <n-button size="tiny" circle type="error" secondary title="Cancelar">
-              <template #icon>
-                <Icon name="ic:outline-close" />
-              </template>
-            </n-button>
+            <ui-button rounded size="icon" variant="secondary">
+              <Icon name="ic:baseline-edit" />
+            </ui-button>
+            <ui-button rounded size="icon" variant="desctructive" class="text-red-500">
+              <Icon name="ic:outline-close" />
+            </ui-button>
           </div>
-        </td>
-      </tr>
-    </tbody>
-  </n-table>
+        </ui-table-cell>
+      </ui-table-row>
+    </ui-table-body>
+  </ui-table>
 </template>
 <script lang="ts" setup>
-import { NTable, NButton, NTag } from 'naive-ui'
-
 const appointments = [
   {
     id: 1,

@@ -1,101 +1,78 @@
 <template>
-  <div class="bg-gray-50 rounded-xl py-4 px-8 max-w-sm mx-auto">
-    <div class="mb-4">
-      <h2 class="font-bold text-xl text-center">{{ stepper.current.value.title }}</h2>
-    </div>
-    <div>
-      <n-form ref="formRef" :model="formValue" :rules="rules" :disabled="isLoading">
-        <div v-if="stepper.isCurrent('business')">
-          <n-form-item label="Nombre" path="businessName">
-            <n-input v-model:value="formValue.businessName" maxlength="30" show-count />
-          </n-form-item>
-          <n-form-item label="Categoria" path="category">
-            <client-only>
-              <n-select v-model:value="formValue.category" clearable :options="categories"></n-select>
-            </client-only>
-          </n-form-item>
-          <n-form-item label="Descripcion" path="businessDescription">
-            <n-input
-              v-model:value="formValue.businessDescription"
-              type="textarea"
-              maxlength="150"
-              show-count
-              :autosize="{
-                minRows: 3,
-                maxRows: 3,
-              }"
-            />
-          </n-form-item>
+  <ui-card class="max-w-sm mx-auto">
+    <ui-card-header>
+      <ui-card-title class="font-bold text-xl text-center">Crea tu negocio</ui-card-title>
+    </ui-card-header>
+
+    <ui-card-content>
+      <form class="grid gap-4" @submit.prevent>
+        <div>
+          <ui-label>Nombre de tu negocio</ui-label>
+          <ui-input v-model="form.businessName" />
+          <template v-if="$v.businessName.$error">
+            <div v-if="$v.businessName.required?.$invalid" class="text-red-500 mt-1">
+              Por favor ingresa nombre de tu negocio
+            </div>
+          </template>
         </div>
-        <div v-if="stepper.isCurrent('service')">
-          <n-form-item label="Nombre de tu servicio" path="serviceName">
-            <n-input v-model:value="formValue.serviceName" maxlength="30" show-count />
-          </n-form-item>
-          <n-form-item label="Descripcion" path="serviceDescription">
-            <n-input
-              v-model:value="formValue.serviceDescription"
-              type="textarea"
-              maxlength="150"
-              show-count
-              :autosize="{
-                minRows: 3,
-                maxRows: 3,
-              }"
-            />
-          </n-form-item>
+        <div>
+          <ui-label>Categoria</ui-label>
+          <ui-select v-model="form.category">
+            <ui-select-trigger>
+              <ui-select-value placeholder="Eligi una categoria" />
+            </ui-select-trigger>
+            <ui-select-content>
+              <ui-select-group>
+                <ui-select-item v-for="(category, idx) in categories" :key="idx" :value="category.value">
+                  {{ category.label }}
+                </ui-select-item>
+              </ui-select-group>
+            </ui-select-content>
+          </ui-select>
+          <template v-if="$v.category.$error">
+            <div v-if="$v.category.required?.$invalid" class="text-red-500 mt-1">Por favor eligir una categoria</div>
+          </template>
+        </div>
+        <div>
+          <ui-label>Nombre de tu servicio</ui-label>
+          <ui-input v-model="form.serviceName" />
+          <template v-if="$v.serviceName.$error">
+            <div v-if="$v.serviceName.required?.$invalid" class="text-red-500 mt-1">
+              Por favor ingresa nombre de tu servicio
+            </div>
+          </template>
         </div>
         <div class="grid gap-2">
-          <n-button type="primary" block :loading="isLoading" @click="stepper.current.value.validate()">
-            Siguiente
-          </n-button>
-          <n-button v-if="stepper.isCurrent('service')" block :disabled="isLoading" @click="stepper.goToPrevious()">
-            Anterior
-          </n-button>
+          <ui-button block :loading="isLoading" @click="validate">Crear</ui-button>
         </div>
-      </n-form>
-    </div>
-  </div>
+      </form>
+    </ui-card-content>
+  </ui-card>
 </template>
 <script lang="ts" setup>
-import { NSelect, NForm, NFormItem, NInput, FormInst, FormRules, NButton, useMessage } from 'naive-ui'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email, minLength } from '@vuelidate/validators'
 
 const isLoading = ref(false)
-const message = useMessage()
 
-const formRef = ref<FormInst | null>(null)
-const formValue = ref({
+const form = reactive({
   businessName: '',
-  businessDescription: '',
   category: '',
   serviceName: '',
-  serviceDescription: '',
+  // serviceDescription: '',
 })
 
-const rules: FormRules = {
+const rules = {
   businessName: {
-    key: 'business',
-    required: true,
-    message: 'Por favor ingresa nombre de tu negocio',
-    trigger: 'blur',
-  },
-  businessDescription: {
-    key: 'business',
-    required: false,
+    required,
   },
   category: {
-    key: 'business',
-    required: true,
-    message: 'Por favor selecciona una categoria',
-    trigger: 'blur',
+    required,
   },
   serviceName: {
-    required: true,
-    message: 'Por favor ingresa nombre de tu servicio',
-    trigger: 'blur',
+    required,
   },
-  serviceDescription: {
-    required: false,
-  },
+  // serviceDescription: {},
 }
 
 const categories = [
@@ -125,37 +102,18 @@ const categories = [
   },
 ]
 
-const stepper = useStepper({
-  business: {
-    validate: () => {
-      try {
-        formRef.value?.validate(
-          (errors) => {
-            if (!errors) {
-              stepper.goToNext()
-            }
-          },
-          (rule) => rule?.key === 'business',
-        )
-      } catch (error) {}
-    },
-    title: 'Crea tu negocio',
-  },
-  service: {
-    validate: async () => {
-      try {
-        await formRef.value?.validate()
-        createBusiness()
-      } catch (error) {}
-    },
-    title: 'Agrega tu primero servicio',
-  },
-})
+const $v = useVuelidate(rules, form)
+
+async function validate() {
+  try {
+    await $v.value.$validate()
+    await createBusiness()
+  } catch (error) {}
+}
 
 async function createBusiness() {
   isLoading.value = true
   await sleep(2000)
-  message.success('Negocio creado')
   isLoading.value = false
 }
 </script>
