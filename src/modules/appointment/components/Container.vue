@@ -13,7 +13,7 @@
       <client-only>
         <ui-popover>
           <ui-popover-trigger>
-            <ui-button :variant="'outline'" :class="cn('justify-start text-left font-normal')">
+            <ui-button :variant="'outline'" :class="cn('justify-start text-left font-normal w-[150px]')">
               <CalendarIcon class="mr-2 h-4 w-4" />
               <span>{{ date ? formatDate(date, 'PP') : 'Pick a date' }}</span>
             </ui-button>
@@ -23,7 +23,7 @@
           </ui-popover-content>
         </ui-popover>
       </client-only>
-      <ui-button variant="secondary">Nuevo turno</ui-button>
+      <ui-button variant="secondary" @click="openAppointmentCreateModal">Nuevo turno</ui-button>
     </div>
 
     <appointment-table v-if="viewport.isGreaterThan('sm')" />
@@ -37,10 +37,16 @@
 <script lang="ts" setup>
 import { startOfToday } from 'date-fns/esm'
 import { Calendar as CalendarIcon } from 'lucide-vue-next'
+import { useModal } from 'vue-final-modal'
+
+import { AppointmentCreateModal } from '#components'
 
 import { cn } from '#shared/lib/utils'
 
 const viewport = useViewport()
+const { open: openAppointmentCreateModal } = useModal({
+  component: AppointmentCreateModal,
+})
 
 const date = ref(startOfToday().getTime())
 const emailOrName = ref('')

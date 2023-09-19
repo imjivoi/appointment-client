@@ -20,7 +20,7 @@
         <ui-table-cell>{{ appointment.service }}</ui-table-cell>
         <ui-table-cell>
           <div class="flex gap-2">
-            <ui-button rounded size="icon" variant="secondary">
+            <ui-button rounded size="icon" variant="desctructive">
               <Icon name="ic:baseline-edit" />
             </ui-button>
             <ui-button rounded size="icon" variant="desctructive" class="text-red-500">

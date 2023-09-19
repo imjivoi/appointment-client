@@ -6,6 +6,7 @@ import {
   SelectPortal,
   SelectViewport,
 } from 'radix-vue'
+
 import { cn, useEmitAsProps } from '#shared/lib/utils'
 
 const props = withDefaults(defineProps<SelectContentProps & { class?: string }>(), {

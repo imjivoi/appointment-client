@@ -18,6 +18,11 @@ export default defineNuxtModule({
         file: resolve('pages/DashboardAppointments.vue'),
         path: '/dashboard/appointments',
       },
+      {
+        name: 'create-appointment',
+        file: resolve('pages/CreateAppointmentByClient.vue'),
+        path: '/a/:serviceToken',
+      },
     ]
 
     extendPages((pages) => {

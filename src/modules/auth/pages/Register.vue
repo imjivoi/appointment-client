@@ -19,7 +19,7 @@
           <ui-label>Apellido</ui-label>
           <ui-input v-model="form.lastName" />
           <template v-if="$v.lastName.$error">
-            <div v-if="$v.lastName.required?.$invalid" class="text-red-500 mt-1">Por favor ingresa tu nombre</div>
+            <div v-if="$v.lastName.required?.$invalid" class="text-red-500 mt-1">Por favor ingresa tu apellido</div>
             <div v-else-if="$v.lastName.minLength?.$invalid" class="text-red-500 mt-1">
               Apellido debe contener al menos 3 digitos
             </div>

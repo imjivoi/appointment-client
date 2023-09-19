@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { SelectItem, SelectItemIndicator, type SelectItemProps, SelectItemText } from 'radix-vue'
-import { cn } from '#shared/lib/utils'
 import { Check as CheckIcon } from 'lucide-vue-next'
+import { SelectItem, SelectItemIndicator, type SelectItemProps, SelectItemText } from 'radix-vue'
+
+import { cn } from '#shared/lib/utils'
 
 const props = defineProps<SelectItemProps & { class?: string }>()
 </script>
