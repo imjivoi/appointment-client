@@ -72,4 +72,9 @@ export default defineNuxtConfig({
     plugins: resolve('./src/app/plugins'),
     assets: resolve('./src/app/assets'),
   },
+  typescript: {
+    tsConfig: {
+      include: ['./src/**/*'],
+    },
+  },
 })

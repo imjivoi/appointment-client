@@ -39,13 +39,13 @@ import { startOfToday } from 'date-fns/esm'
 import { Calendar as CalendarIcon } from 'lucide-vue-next'
 import { useModal } from 'vue-final-modal'
 
-import { AppointmentCreateModal } from '#components'
+import { AppointmentCreateByAdminModal } from '#components'
 
 import { cn } from '#shared/lib/utils'
 
 const viewport = useViewport()
 const { open: openAppointmentCreateModal } = useModal({
-  component: AppointmentCreateModal,
+  component: AppointmentCreateByAdminModal,
 })
 
 const date = ref(startOfToday().getTime())

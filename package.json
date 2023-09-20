@@ -23,7 +23,8 @@
     "nuxt": "^3.7.3",
     "nuxt-viewport": "^2.0.6",
     "prettier": "^3.0.3",
-    "sass": "^1.66.1"
+    "sass": "^1.66.1",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
