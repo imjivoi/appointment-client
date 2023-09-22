@@ -35,10 +35,10 @@ const menuItems = [
     icon: 'material-symbols:cleaning-services',
     to: '/dashboard/services',
   },
-  {
-    label: 'Configuración',
-    icon: 'ic:outline-settings',
-    to: '/dashboard/settings',
-  },
+  // {
+  //   label: 'Configuración',
+  //   icon: 'ic:outline-settings',
+  //   to: '/dashboard/settings',
+  // },
 ]
 </script>
