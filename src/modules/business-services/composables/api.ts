@@ -1,5 +1,5 @@
 interface PostOptions {
-  title: string
+  name: string
   description?: string
   duration: number
 }
@@ -10,13 +10,35 @@ interface GetOptions {
 
 interface UpdateOptions {
   id: string
-  title: string
+  name: string
   description?: string
   duration: number
 }
 
-export async function getServices({ id }: GetOptions) {
-  const result = await useAsyncData('services', () => {})
+export function getServices() {
+  const result = useAsyncData('services', async () => {
+    await sleep(2000)
+    return {
+      id: '1',
+      name: 'Service 1',
+      description: 'Service 1 description',
+      duration: 5,
+    }
+  })
+
+  return result
+}
+
+export function getService({ id }: GetOptions) {
+  const result = useAsyncData(`service-${id}`, async () => {
+    await sleep(2000)
+    return {
+      id: '1',
+      name: 'Service 1',
+      description: 'Service 1 description',
+      duration: 5,
+    }
+  })
 
   return result
 }

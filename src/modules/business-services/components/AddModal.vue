@@ -23,7 +23,7 @@
         </div>
         <div>
           <ui-label>Duracion (en minutos)</ui-label>
-          <ui-input v-model="form.duration" type="number" />
+          <ui-input v-model="form.duration" type="number" min="1" />
           <template v-if="$v.duration.$error">
             <div v-if="$v.duration.required?.$invalid" class="text-red-500 mt-1">
               Por favor ingresa la duracion del servicio

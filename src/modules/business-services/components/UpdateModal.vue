@@ -4,7 +4,15 @@
       <h2 class="text-lg sm:text-2xl font-bold">Editar servicio</h2>
     </template>
     <div>
-      <form class="grid gap-4" @submit.prevent>
+      <template v-if="pending">
+        <div class="grid gap-4">
+          <ui-skeleton class="h-4 w-full" />
+          <ui-skeleton class="h-4 w-full" />
+          <ui-skeleton class="h-4 w-full" />
+          <ui-skeleton class="h-4 w-full" />
+        </div>
+      </template>
+      <form v-else class="grid gap-4" @submit.prevent>
         <div>
           <ui-label>Nombre</ui-label>
           <ui-input v-model="form.name" />
@@ -23,7 +31,7 @@
         </div>
         <div>
           <ui-label>Duracion (en minutos)</ui-label>
-          <ui-input v-model="form.duration" type="number" />
+          <ui-input v-model="form.duration" type="number" min="1" />
           <template v-if="$v.duration.$error">
             <div v-if="$v.duration.required?.$invalid" class="text-red-500 mt-1">
               Por favor ingresa la duracion del servicio
@@ -40,22 +48,16 @@
   </modal>
 </template>
 <script lang="ts" setup>
+import { getService } from '../composables/api'
 import { useCreateServiceForm } from '../composables/useCreateServiceForm'
-import { useGetService } from '../composables/useGetService'
 
 const { form, $v, validate } = useCreateServiceForm()
 
-const {
-  data: { id, name, description },
-  pending,
-} = useGetService()
+const { data, pending } = getService({ id: '22' })
 
-watch(
-  () => id,
-  () => {
-    form.name = name
-    form.description = description
-    form.duration = duration
-  },
-)
+watch(pending, () => {
+  form.name = data.value.name
+  form.description = data.value.description
+  form.duration = data.value.duration
+})
 </script>
