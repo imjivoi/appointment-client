@@ -1,16 +1,18 @@
 <template>
   <form @submit.prevent>
-    <div>
+    <div class="mb-6">
       <ui-label>Duracion (en minutos)</ui-label>
-      <ui-input v-model="form.duration" type="number" min="1" />
-      <template v-if="$v.duration.$error">
-        <div v-if="$v.duration.required?.$invalid" class="text-red-500 mt-1">
+      <ui-input class="max-w-[150px]" v-model="formValue.appointmentDuration" type="number" />
+      <template v-if="$v.appointmentDuration.$error">
+        <div v-if="$v.appointmentDuration.required?.$invalid" class="text-red-500 mt-1">
           Por favor ingresa la duracion del servicio
+        </div>
+        <div v-else-if="$v.appointmentDuration.minValue?.$invalid" class="text-red-500 mt-1">
+          Duracion debe ser mayor a 0
         </div>
       </template>
     </div>
-
-    <template v-if="formValue.timeSlots.length">
+    <div class="grid gap-2">
       <create-form-item
         v-for="(timeSlot, timeSlotIdx) in formValue.timeSlots"
         :key="timeSlotIdx"
@@ -19,21 +21,18 @@
         :week-day="weekDays[timeSlot.weekDay]"
         :idx="timeSlotIdx"
       ></create-form-item>
-    </template>
-    <template v-else-if="isInitiatingForm">
-      <div class="space-y-2">
-        <ui-skeleton v-for="i in 7" :key="i" class="h-50px" />
-      </div>
-    </template>
-    <div class="flex items-center justify-center gap-4">
+    </div>
+
+    <div class="flex items-center justify-center gap-4 mt-6">
       <ui-button @click="validate">Crear</ui-button>
       <ui-button variant="secondary" @click="$emit('update:modelValue')">Cancelar</ui-button>
     </div>
   </form>
 </template>
 <script setup lang="ts">
-import { setHours, startOfDay } from 'date-fns/esm'
-import { NForm, NFormItem, FormInst, NInputNumber, NSkeleton, NButton } from 'naive-ui'
+import { useVuelidate } from '@vuelidate/core'
+import { required, minValue, helpers } from '@vuelidate/validators'
+import { setHours, startOfDay, setSeconds } from 'date-fns/esm'
 
 import CreateFormItem from './CreateFormItem.vue'
 
@@ -159,23 +158,40 @@ const TIME_SLOTS_DEFAULT = [
 
 const formValue = reactive({
   appointmentDuration: 15,
-  timeSlots: [] as typeof TIME_SLOTS_DEFAULT,
 })
 
-function validate() {
-  formValue.timeSlots.forEach((timeSlot) => {
-    if (timeSlot.options.active) {
-      timeSlot.options.time.forEach((time) => {
-        if (time.startAt >= time.endAt) {
-          throw new Error('La hora de inicio debe ser menor a la hora de fin')
-        }
-      })
-    }
-  })
+const rules = {
+  appointmentDuration: { required, minValue: minValue(1) },
+}
+
+const $v = useVuelidate(rules, formValue)
+
+async function validate() {
+  $v.value.$touch()
+  await $v.value.$validate()
+  // formValue.timeSlots.forEach((timeSlot) => {
+  //   if (timeSlot.options.active) {
+  //     timeSlot.options.time.forEach((time) => {
+  //       if (time.startAt >= time.endAt) {
+  //         throw new Error('La hora de inicio debe ser menor a la hora de fin')
+  //       }
+  //     })
+  //   }
+  // })
+
+  console.log('error: ', $v.value.$error)
+}
+
+function transformTime(time: string) {
+  const toSeconds = () => {
+    const [hours, minutes] = time.split(':')
+    return Number(hours) * 60 * 60 + Number(minutes) * 60
+  }
+  return setSeconds(startOfDay(Date.now()), toSeconds()).getTime()
 }
 
 onMounted(() => {
-  nextTick(async () => {
+  nextTick(() => {
     formValue.timeSlots = TIME_SLOTS_DEFAULT
   })
 })

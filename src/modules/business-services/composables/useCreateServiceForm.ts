@@ -1,5 +1,5 @@
 import { useVuelidate } from '@vuelidate/core'
-import { required, email, minValue } from '@vuelidate/validators'
+import { required, minValue } from '@vuelidate/validators'
 
 export function useCreateServiceForm() {
   const form = reactive({

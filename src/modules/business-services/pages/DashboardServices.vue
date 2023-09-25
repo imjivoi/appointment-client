@@ -5,11 +5,12 @@
       <ui-button @click="addService">Agrear nuevo</ui-button>
     </div>
     <div class="grid gap-4">
-      <business-services-item
+      <service-item
         v-for="service in services"
         :key="service.id"
         v-bind="service"
-        @edit="openBusinessServicesUpdateModal"
+        @update:info="openBusinessServicesUpdateModal"
+        @update:time="openTimeSlotModal"
       />
     </div>
   </div>
@@ -17,7 +18,7 @@
 <script lang="ts" setup>
 import { useModal } from 'vue-final-modal'
 
-import { BusinessServicesAddModal, BusinessServicesUpdateModal } from '#components'
+import { AddServiceModal, UpdateServiceModal, TimeSlotModal, ServiceItem } from '../components'
 
 const services = [
   {
@@ -41,11 +42,15 @@ const services = [
 ]
 
 const { open: openBusinessServicesAddModal } = useModal({
-  component: BusinessServicesAddModal,
+  component: AddServiceModal,
 })
 
 const { open: openBusinessServicesUpdateModal } = useModal({
-  component: BusinessServicesUpdateModal,
+  component: UpdateServiceModal,
+})
+
+const { open: openTimeSlotModal } = useModal({
+  component: TimeSlotModal,
 })
 
 const addService = () => {

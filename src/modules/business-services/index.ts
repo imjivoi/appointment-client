@@ -7,10 +7,10 @@ export default defineNuxtModule({
   setup() {
     const { resolve } = createResolver(import.meta.url)
 
-    addComponentsDir({
-      prefix: 'BusinessServices',
-      path: resolve('components'),
-    })
+    // addComponentsDir({
+    //   prefix: 'BusinessServices',
+    //   path: resolve('components'),
+    // })
 
     const businessPages = [
       {

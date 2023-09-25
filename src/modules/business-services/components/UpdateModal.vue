@@ -1,63 +1,33 @@
 <template>
-  <modal class="sm:w-[400px]">
-    <template #header>
-      <h2 class="text-lg sm:text-2xl font-bold">Editar servicio</h2>
-    </template>
-    <div>
-      <template v-if="pending">
-        <div class="grid gap-4">
-          <ui-skeleton class="h-4 w-full" />
-          <ui-skeleton class="h-4 w-full" />
-          <ui-skeleton class="h-4 w-full" />
-          <ui-skeleton class="h-4 w-full" />
-        </div>
-      </template>
-      <form v-else class="grid gap-4" @submit.prevent>
-        <div>
-          <ui-label>Nombre</ui-label>
-          <ui-input v-model="form.name" />
-          <template v-if="$v.name.$error">
-            <div v-if="$v.name.required?.$invalid" class="text-red-500 text-sm mt-1 wrap-space">
-              Por favor ingresa el nombre del servicio
-            </div>
-            <div v-else-if="$v.name.minLength?.$invalid" class="text-red-500 mt-1">
-              Nombre debe contener al menos 3 digitos
-            </div>
-          </template>
-        </div>
-        <div>
-          <ui-label>Descripcion (opcional)</ui-label>
-          <ui-textarea v-model="form.description" />
-        </div>
-        <div>
-          <ui-label>Duracion (en minutos)</ui-label>
-          <ui-input v-model="form.duration" type="number" min="1" />
-          <template v-if="$v.duration.$error">
-            <div v-if="$v.duration.required?.$invalid" class="text-red-500 mt-1">
-              Por favor ingresa la duracion del servicio
-            </div>
-          </template>
-        </div>
-
-        <div class="grid gap-2">
-          <ui-button block @click="validate">Guardar</ui-button>
-          <ui-button block variant="outline" @click="$emit('update:modelValue')">Cancelar</ui-button>
-        </div>
-      </form>
-    </div>
+  <modal>
+    <ui-tabs :default-value="TABS[0].value">
+      <div class="text-center">
+        <ui-tabs-list>
+          <ui-tabs-trigger v-for="(tab, idx) in TABS" :key="idx" :value="tab.value">
+            <span>{{ tab.label }}</span>
+          </ui-tabs-trigger>
+        </ui-tabs-list>
+      </div>
+      <ui-tabs-content v-for="(tab, idx) in TABS" :key="idx" :value="tab.value">
+        <component :is="tab.component" @update:modelValue="$emit('update:modelValue')" />
+      </ui-tabs-content>
+    </ui-tabs>
   </modal>
 </template>
 <script lang="ts" setup>
-import { getService } from '../composables/api'
-import { useCreateServiceForm } from '../composables/useCreateServiceForm'
+import LazyUpdateInfoForm from './UpdateInfoForm.vue'
+import LazyTimeSlotsForm from './time-slot/CreateForm.vue'
 
-const { form, $v, validate } = useCreateServiceForm()
-
-const { data, pending } = getService({ id: '22' })
-
-watch(pending, () => {
-  form.name = data.value.name
-  form.description = data.value.description
-  form.duration = data.value.duration
-})
+const TABS = [
+  {
+    value: 'info',
+    label: 'Información basica',
+    component: LazyUpdateInfoForm,
+  },
+  {
+    value: 'time-slots',
+    label: 'Horarios',
+    component: LazyTimeSlotsForm,
+  },
+]
 </script>

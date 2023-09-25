@@ -1,5 +1,5 @@
 <template>
-  <ui-modal>
+  <modal>
     <template #header>
       <div class="text-center">
         <h2 class="text-2xl font-bold">Horario</h2>
@@ -7,7 +7,10 @@
       </div>
     </template>
     <div>
-      <business-time-slot-create-form @update:modelValue="$emit('update:modelValue')" />
+      <create-form @update:modelValue="$emit('update:modelValue')" />
     </div>
-  </ui-modal>
+  </modal>
 </template>
+<script setup lang="ts">
+import CreateForm from './CreateForm.vue'
+</script>
