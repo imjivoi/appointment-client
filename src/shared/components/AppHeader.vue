@@ -1,6 +1,6 @@
 <template>
   <header>
-    <div class="container mx-auto flex justify-between items-center h-[48px] px-10">
+    <div class="container mx-auto flex justify-between items-center h-[8vh] px-10">
       <div class="logo text-xl">
         <!-- <nuxt-link :to="getHomeLink()">liny</nuxt-link> -->
       </div>

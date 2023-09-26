@@ -19,6 +19,11 @@ export default defineNuxtModule({
         path: '/dashboard/appointments',
       },
       {
+        name: 'dashboard-appointments-create',
+        file: resolve('pages/CreateAppointmentByAdmin.vue'),
+        path: '/dashboard/appointments/create',
+      },
+      {
         name: 'create-appointment',
         file: resolve('pages/CreateAppointmentByClient.vue'),
         path: '/a/:serviceToken',

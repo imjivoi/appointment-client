@@ -18,14 +18,19 @@
         <ui-table-cell>{{ appointment.date }}</ui-table-cell>
         <ui-table-cell>{{ appointment.client }}</ui-table-cell>
         <ui-table-cell>{{ appointment.service }}</ui-table-cell>
+        <ui-table-cell></ui-table-cell>
         <ui-table-cell>
           <div class="flex gap-2">
-            <ui-button rounded size="icon" variant="desctructive">
+            <ui-button rounded size="icon" variant="ghost">
               <Icon name="ic:baseline-edit" />
             </ui-button>
-            <ui-button rounded size="icon" variant="desctructive" class="text-red-500">
-              <Icon name="ic:outline-close" />
-            </ui-button>
+            <modal-confirm title="Cancelar cita?" :on-confirm="cancelAppointment">
+              <template #trigger>
+                <ui-button rounded size="icon" variant="ghost" class="text-red-500">
+                  <Icon name="ic:outline-close" />
+                </ui-button>
+              </template>
+            </modal-confirm>
           </div>
         </ui-table-cell>
       </ui-table-row>
@@ -51,4 +56,9 @@ const appointments = [
     status: 'Pendiente',
   },
 ]
+
+async function cancelAppointment() {
+  await sleep(2000)
+  console.log('cancel')
+}
 </script>

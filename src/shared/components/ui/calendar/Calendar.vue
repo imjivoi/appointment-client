@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
+import { getMonth, setMonth } from 'date-fns/esm'
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { DatePicker } from 'v-calendar'
 
@@ -22,6 +23,7 @@ const props = withDefaults(
     modelModifiers?: object
     columns?: number
     type?: 'single' | 'range'
+    minDate?: Date
   }>(),
   {
     type: 'single',
@@ -38,7 +40,17 @@ const modelValue = useVModel(props, 'modelValue', emits, {
 
 const datePicker = ref<InstanceType<typeof DatePicker>>()
 // @ts-expect-error in this current version of v-calendar has the calendaRef instance, which is required to handle arrow nav.
-const calendarRef = computed<InstanceType<typeof Calendar>>(() => datePicker.value.calendarRef)
+const calendarRef = computed<InstanceType<typeof Calendar>>(() => datePicker.value?.calendarRef)
+
+const isPrevDisabled = computed(() => {
+  if (!calendarRef.value || !calendarRef.value.firstPage) return false
+
+  const { minDate } = props
+
+  if (!minDate) return false
+
+  return getMonth(setMonth(minDate, getMonth(minDate) - 1)) < getMonth(calendarRef.value.firstPage!.month)
+})
 
 function handleNav(direction: 'prev' | 'next') {
   if (!calendarRef.value) return
@@ -59,6 +71,7 @@ onMounted(async () => {
     <div class="absolute top-3 flex justify-between w-full px-4">
       <button
         :class="cn(buttonVariants({ variant: 'outline' }), 'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100')"
+        :disabled="isPrevDisabled"
         @click="handleNav('prev')"
       >
         <ChevronLeft class="w-4 h-4" />
@@ -78,6 +91,7 @@ onMounted(async () => {
       trim-weeks
       :transition="'none'"
       :columns="columns"
+      :min-date="minDate"
     />
   </div>
 </template>

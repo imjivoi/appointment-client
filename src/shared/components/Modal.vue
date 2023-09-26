@@ -11,7 +11,10 @@
     content-transition="vfm-fade"
     teleport-to="#__nuxt"
   >
-    <div v-if="$slots.header" class="mb-8 px-2 sm:px-auto">
+    <button class="absolute top-4 right-4" @click="$emit('update:modelValue', false)">
+      <Icon name="ic:outline-close" class="w-6 h-6" />
+    </button>
+    <div v-if="$slots.header" class="mb-8 mt-2 px-2 sm:px-auto">
       <slot name="header"></slot>
     </div>
 

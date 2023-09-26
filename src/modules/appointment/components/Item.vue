@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between py-4 px-8 rounded-xl bg-gray-50">
+  <div class="flex gap-8 py-4 px-8 rounded-xl bg-gray-50">
     <div>
       <div class="mb-2 font-bold truncate max-w-[150px]">{{ fullName }}</div>
       <div>{{ email }}</div>

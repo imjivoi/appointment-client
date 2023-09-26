@@ -85,4 +85,13 @@ import { useCreateAppointment } from '../composables/useCreateAppointment'
 const { $v, form, selectedDate, selectedTimeSlot, enabledTimeSlots, validate } = useCreateAppointment()
 
 const step = ref(1)
+
+const appointment = {
+  id: 1,
+  time: '10:00',
+  date: '2021-10-10',
+  client: 'John Doe',
+  service: 'Corte de cabello',
+  status: 'Pendiente',
+}
 </script>

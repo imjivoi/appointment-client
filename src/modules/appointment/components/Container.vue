@@ -23,15 +23,14 @@
           </ui-popover-content>
         </ui-popover>
       </client-only>
-      <ui-button variant="secondary" @click="openAppointmentCreateModal">Nuevo turno</ui-button>
+      <ui-button variant="secondary" :as="defineNuxtLink({})" to="/dashboard/appointments/create">
+        Nuevo turno
+      </ui-button>
     </div>
 
-    <appointment-table v-if="viewport.isGreaterThan('sm')" />
-    <template v-else>
-      <div class="grid gap-6">
-        <appointment-item />
-      </div>
-    </template>
+    <div class="grid gap-6">
+      <appointment-item v-for="appointment in appointments" v-bind="appointment" />
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -39,18 +38,38 @@ import { startOfToday } from 'date-fns/esm'
 import { Calendar as CalendarIcon } from 'lucide-vue-next'
 import { useModal } from 'vue-final-modal'
 
-import { AppointmentCreateByAdminModal } from '#components'
+import AppointmentItem from './Item.vue'
 
 import { cn } from '#shared/lib/utils'
-
-const viewport = useViewport()
-const { open: openAppointmentCreateModal } = useModal({
-  component: AppointmentCreateByAdminModal,
-})
 
 const date = ref(startOfToday().getTime())
 const emailOrName = ref('')
 
 const page = ref(2)
 const pageSize = ref(20)
+
+const appointments = [
+  {
+    id: 1,
+    startAt: '2023-09-26T18:34:03.959Z',
+    endAt: '2023-09-26T19:34:03.959Z',
+    client: 'John Doe',
+    firstName: 'John',
+    lastName: 'Doe',
+    service: 'Corte de cabello',
+    status: 'Pendiente',
+    email: 'john@doe.com',
+  },
+  {
+    id: 2,
+    startAt: '2023-09-27T18:34:03.959Z',
+    endAt: '2023-09-27T19:34:03.959Z',
+    client: 'John Doe',
+    firstName: 'John',
+    lastName: 'Doe',
+    service: 'Corte de cabello',
+    status: 'Pendiente',
+    email: 'john@doe.com',
+  },
+]
 </script>
