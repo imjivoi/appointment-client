@@ -1,51 +1,58 @@
 <template>
-  <aside class="w-50 h-[92vh] flex items-center justify-center ">
-    <div class="px-4">
-      <ul class="grid gap-2">
-        <li v-for="item in menuItems" :key="item.to">
-          <nuxt-link
-            :to="item.to"
-            class="flex items-center gap-2 font-medium px-4 py-2 rounded-lg transition-all hover:bg-slate-100"
-          >
-            <Icon :name="item.icon" />
-            <span>{{ item.label }}</span>
-          </nuxt-link>
-        </li>
-      </ul>
+  <aside class="min-h-screen w-[230px] px-8 py-4 flex flex-col justify-between">
+    <div class="mt-[30vh] w-full">
+      <UVerticalNavigation
+        :links="links"
+        :ui="{
+          wrapper: 'flex flex-col gap-2',
+          base: 'transition-all',
+          rounded: 'dark:before:rounded-full',
+          active: 'dark:before:bg-gray-800',
+          inactive: 'hover:dark:before:bg-gray-800',
+          padding: 'py-4 px-8',
+          icon: {
+            active: 'dark:text-primary ',
+          },
+        }"
+      />
+    </div>
+    <div class="">
+      <u-button
+        icon="i-heroicons-arrow-right-on-rectangle"
+        size="xl"
+        :ui="{
+          rounded: 'rounded-full',
+        }"
+        block
+        color="primary"
+        variant="solid"
+        label="Sign Out"
+        :trailing="false"
+      />
     </div>
   </aside>
 </template>
 <script lang="ts" setup>
-const menuItems = [
+const links = [
   {
     label: 'Dashboard',
-    icon: 'ic:outline-dashboard',
+    icon: 'i-heroicons-home',
     to: '/dashboard',
   },
   {
     label: 'Turnos',
-    icon: 'ic:outline-event',
+    icon: 'i-heroicons-table-cells',
     to: '/dashboard/appointments',
   },
-  // {
-  //   label: 'Clientes',
-  //   icon: 'ic:outline-people',
-  //   to: '/dashboard/clients',
-  // },
   {
     label: 'Servicios',
-    icon: 'material-symbols:cleaning-services',
+    icon: 'i-heroicons-cube',
     to: '/dashboard/services',
   },
-  // {
-  //   label: 'Configuración',
-  //   icon: 'ic:outline-settings',
-  //   to: '/dashboard/settings',
-  // },
+  {
+    label: 'Calendar',
+    icon: 'i-heroicons-calendar',
+    to: '/calendar',
+  },
 ]
 </script>
-<style lang="postcss" scoped>
-.router-link-active {
-  @apply bg-slate-100;
-}
-</style>

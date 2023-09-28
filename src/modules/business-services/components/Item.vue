@@ -1,26 +1,33 @@
 <template>
-  <ui-card>
-    <ui-card-header class="flex flex-row justify-between">
+  <u-card
+    :ui="{
+      rounded: 'rounded-2xl',
+    }"
+  >
+    <div class="flex justify-between">
       <div>
-        <ui-card-title>{{ name }}</ui-card-title>
-        <ui-card-description>{{ description }}</ui-card-description>
+        <h4>{{ name }}</h4>
+        <p class="text-gray-500">{{ description }}</p>
       </div>
       <div class="flex items-center gap-2">
-        <ui-button rounded size="icon" variant="secondary" @click="$emit('update:info')">
-          <Icon name="ic:baseline-edit" />
-        </ui-button>
-        <modal-confirm title="Eliminar servicio?" :on-confirm="deleteService">
+        <u-button icon="i-heroicons-pencil" variant="ghost" size="xs" @click="$emit('update:info')"></u-button>
+        <u-button icon="i-heroicons-trash" color="red" variant="ghost" size="xs" @click="openConfirmModal"></u-button>
+        <!-- <modal-confirm title="Eliminar servicio?" :on-confirm="deleteService">
           <template #trigger>
-            <ui-button variant="link" class="text-red-500">
+            <ui-button variant="link">
               <Icon name="ic:baseline-delete" />
             </ui-button>
           </template>
-        </modal-confirm>
+        </modal-confirm> -->
       </div>
-    </ui-card-header>
-  </ui-card>
+    </div>
+  </u-card>
 </template>
 <script lang="ts" setup>
+import { useModal } from 'vue-final-modal'
+
+import { ModalConfirm } from '#components'
+
 defineProps<{
   id: string
   name: string
@@ -32,9 +39,15 @@ defineEmits<{
   (e: 'update:info'): void
   (e: 'delete'): void
 }>()
-
-async function deleteService() {
-  await sleep(2000)
-  console.log('delete')
-}
+const { open: openConfirmModal, close } = useModal({
+  component: ModalConfirm,
+  attrs: {
+    title: 'Eliminar servicio?',
+    onConfirm: async () => {
+      await sleep(2000)
+      close()
+      console.log('delete')
+    },
+  },
+})
 </script>

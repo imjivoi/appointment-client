@@ -27,6 +27,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@nuxt/ui": "^2.8.1",
     "@popperjs/core": "^2.11.8",
     "@tanstack/vue-table": "^8.10.0",
     "@vuelidate/core": "^2.0.3",

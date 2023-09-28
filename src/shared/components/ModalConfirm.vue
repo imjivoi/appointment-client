@@ -1,21 +1,20 @@
 <template>
-  <ui-alert-dialog v-model:open="open">
-    <ui-alert-dialog-trigger as-child>
-      <slot name="trigger" />
-    </ui-alert-dialog-trigger>
-    <ui-alert-dialog-content>
-      <ui-alert-dialog-header>
-        <ui-alert-dialog-title>{{ title }}</ui-alert-dialog-title>
-        <ui-alert-dialog-description>
-          {{ description }}
-        </ui-alert-dialog-description>
-      </ui-alert-dialog-header>
-      <ui-alert-dialog-footer>
-        <ui-alert-dialog-cancel :disabled="isLoading">{{ cancelText || 'Cancelar' }}</ui-alert-dialog-cancel>
-        <ui-button :disabled="isLoading" @click="confirm">{{ actionText || 'Confirmar' }}</ui-button>
-      </ui-alert-dialog-footer>
-    </ui-alert-dialog-content>
-  </ui-alert-dialog>
+  <modal class="max-w-sm p-4 rounded-xl">
+    <template #header>
+      <h3 class="text-gray-950 dark:text-white font-bold text-2xl">{{ title }}</h3>
+    </template>
+    {{ description }}
+    <template #footer>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <u-button :disabled="isLoading" color="white" @click="$emit('update:modelValue', false)">
+          {{ cancelText || 'Cancelar' }}
+        </u-button>
+        <u-button variant="solid" :loading="isLoading" :disabled="isLoading" @click="confirm">
+          {{ actionText || 'Confirmar' }}
+        </u-button>
+      </div>
+    </template>
+  </modal>
 </template>
 <script setup lang="ts">
 const props = defineProps<{

@@ -1,16 +1,9 @@
 <template>
-  <form @submit.prevent>
+  <u-form @submit.prevent>
     <div class="mb-6">
-      <ui-label>Duracion (en minutos)</ui-label>
-      <ui-input class="max-w-[150px]" v-model="formValue.appointmentDuration" type="number" />
-      <template v-if="$v.appointmentDuration.$error">
-        <div v-if="$v.appointmentDuration.required?.$invalid" class="text-red-500 mt-1">
-          Por favor ingresa la duracion del servicio
-        </div>
-        <div v-else-if="$v.appointmentDuration.minValue?.$invalid" class="text-red-500 mt-1">
-          Duracion debe ser mayor a 0
-        </div>
-      </template>
+      <u-form-group label="Duracion (en minutos)">
+        <u-input class="max-w-[150px]" v-model="formValue.appointmentDuration" type="number" />
+      </u-form-group>
     </div>
     <div class="grid gap-2">
       <create-form-item
@@ -24,10 +17,10 @@
     </div>
 
     <div class="flex items-center justify-center gap-4 mt-6">
-      <ui-button @click="validate">Crear</ui-button>
-      <ui-button variant="secondary" @click="$emit('update:modelValue')">Cancelar</ui-button>
+      <u-button size="lg" @click="validate">Crear</u-button>
+      <u-button size="lg" variant="outline" @click="$emit('update:modelValue')">Cancelar</u-button>
     </div>
-  </form>
+  </u-form>
 </template>
 <script setup lang="ts">
 import { useVuelidate } from '@vuelidate/core'

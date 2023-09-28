@@ -3,33 +3,46 @@
     <div class="mb-4">
       <h2 class="text-2xl font-bold">Turnos</h2>
     </div>
-    <div class="mb-2 flex flex-col sm:flex-row gap-4">
-      <div class="flex gap-2">
-        <ui-input v-model="emailOrName" placeholder="Buscar por email or nombre" />
-        <ui-button variant="ghost">
-          <Icon name="ic:outline-search" />
-        </ui-button>
-      </div>
+    <div class="mb-6 flex flex-col sm:flex-row gap-4">
+      <u-input
+        v-model="emailOrName"
+        placeholder="Buscar por email or nombre"
+        :ui="{ icon: { trailing: { pointer: '' } } }"
+        size="md"
+      >
+        <template #trailing>
+          <u-button color="gray" variant="link" icon="i-heroicons-magnifying-glass" :padded="false"></u-button>
+        </template>
+      </u-input>
       <client-only>
         <ui-popover>
           <ui-popover-trigger>
-            <ui-button :variant="'outline'" :class="cn('justify-start text-left font-normal w-[150px]')">
+            <u-button :variant="'outline'" :class="cn('justify-start text-left font-normal w-[150px]')">
               <CalendarIcon class="mr-2 h-4 w-4" />
               <span>{{ date ? formatDate(date, 'PP') : 'Pick a date' }}</span>
-            </ui-button>
+            </u-button>
           </ui-popover-trigger>
           <ui-popover-content class="w-auto p-0">
             <ui-calendar v-model="date" />
           </ui-popover-content>
         </ui-popover>
       </client-only>
-      <ui-button variant="secondary" :as="defineNuxtLink({})" to="/dashboard/appointments/create">
+      <u-button
+        :ui="{
+          rounded: 'rounded-full',
+          padding: {
+            sm: 'px-8',
+          },
+        }"
+        :as="defineNuxtLink({})"
+        to="/dashboard/appointments/create"
+      >
         Nuevo turno
-      </ui-button>
+      </u-button>
     </div>
 
     <div class="grid gap-6">
-      <appointment-item v-for="appointment in appointments" v-bind="appointment" />
+      <appointment-item v-for="appointment in appointments" v-bind="appointment" :key="appointment.id" />
     </div>
   </div>
 </template>

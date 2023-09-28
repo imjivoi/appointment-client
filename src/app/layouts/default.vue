@@ -1,9 +1,8 @@
 <template>
-  <app-header />
-  <div class="flex gap-10">
+  <div class="flex bg-gray-950">
     <app-sidebar />
-    <main class="h-full flex-auto">
-      <div class="container px-4 lg:max-w-5xl py-16 mx-auto">
+    <main class="flex-1 bg-gray-800">
+      <div class="container px-10 lg:max-w-5xl py-16 mx-auto">
         <slot />
       </div>
     </main>

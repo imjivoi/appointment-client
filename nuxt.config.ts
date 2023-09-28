@@ -18,8 +18,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-  css: ['~/app/assets/styles/index.scss'],
-  modules: ['@nuxtjs/tailwindcss', 'nuxt-icon', 'nuxt-viewport', '@vueuse/nuxt'],
+  modules: ['nuxt-icon', 'nuxt-viewport', '@vueuse/nuxt', '@nuxt/ui'],
   viewport: {
     breakpoints: {
       xs: 320,
@@ -37,11 +36,6 @@ export default defineNuxtConfig({
     },
 
     fallbackBreakpoint: 'lg',
-  },
-  tailwindcss: {
-    configPath: './tailwind.config.ts',
-    cssPath: './src/app/assets/styles/tailwind.css',
-    exposeConfig: true,
   },
   vite: {
     vue: {

@@ -2,7 +2,18 @@
   <div>
     <div class="mb-10 flex justify-between items-center">
       <h2 class="text-2xl font-bold">Servicios</h2>
-      <ui-button @click="addService">Agrear nuevo</ui-button>
+      <u-button
+        size="lg"
+        :ui="{
+          rounded: 'rounded-full',
+          padding: {
+            lg: 'px-8',
+          },
+        }"
+        @click="isOpenAdd = true"
+      >
+        Agrear nuevo
+      </u-button>
     </div>
     <div class="grid gap-4">
       <service-item
@@ -13,12 +24,14 @@
         @update:time="openTimeSlotModal"
       />
     </div>
+
+    <Add v-model:open="isOpenAdd"></Add>
   </div>
 </template>
 <script lang="ts" setup>
 import { useModal } from 'vue-final-modal'
 
-import { AddServiceModal, UpdateServiceModal, TimeSlotModal, ServiceItem } from '../components'
+import { AddServiceModal, UpdateServiceModal, TimeSlotModal, ServiceItem, Add } from '../components'
 
 const services = [
   {
@@ -40,6 +53,8 @@ const services = [
     duration: 30,
   },
 ]
+
+const isOpenAdd = ref(false)
 
 const { open: openBusinessServicesAddModal } = useModal({
   component: AddServiceModal,

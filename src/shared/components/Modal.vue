@@ -2,7 +2,7 @@
   <vue-final-modal
     :content-class="
       cn(
-        'modal-box w-full max-w-full sm:w-fit sm:max-w-[700px] min-w-[320px] mx-auto bg-white mt-16 py-6 sm:px-4 sm:px-8 overflow-hidden',
+        'modal-box w-full max-w-full sm:w-fit sm:max-w-[700px] min-w-[320px] mx-auto bg-white dark:bg-gray-900 mt-16 py-6 sm:px-4 sm:px-8 overflow-hidden',
         props.class ?? '',
       )
     "
@@ -11,7 +11,7 @@
     content-transition="vfm-fade"
     teleport-to="#__nuxt"
   >
-    <button class="absolute top-4 right-4" @click="$emit('update:modelValue', false)">
+    <button class="text-gray-950 dark:text-white absolute top-4 right-4" @click="$emit('update:modelValue', false)">
       <Icon name="ic:outline-close" class="w-6 h-6" />
     </button>
     <div v-if="$slots.header" class="mb-8 mt-2 px-2 sm:px-auto">
@@ -38,7 +38,7 @@ const props = defineProps<{
 }>()
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .vfm--fixed {
   height: 100vh;
 }

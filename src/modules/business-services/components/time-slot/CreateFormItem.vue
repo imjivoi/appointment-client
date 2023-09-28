@@ -4,15 +4,12 @@
       {{ weekDay.label }}
     </div>
     <div class="mt-2">
-      <ui-switch v-model:checked="active">
-        <template #checked>Activo</template>
-        <template #unchecked>Inactivo</template>
-      </ui-switch>
+      <u-toggle v-model="active"></u-toggle>
     </div>
     <div class="grid ml-10 gap-2">
       <div v-for="(timeItem, timeItemIdx) in time" :key="timeItemIdx" class="flex gap-4">
         <div class="w-32 block">
-          <ui-input v-model="timeItem.startAt" :disabled="!active" type="time" />
+          <u-input v-model="timeItem.startAt" :disabled="!active" type="time" />
         </div>
         <span
           class="mt-2"
@@ -23,8 +20,8 @@
           hasta
         </span>
         <div class="w-32">
-          <div>
-            <ui-input v-model="timeItem.endAt" :disabled="!active" type="time" />
+          <u-form-group>
+            <u-input v-model="timeItem.endAt" :disabled="!active" type="time" />
             <template v-if="$v.time.$each.$response.$errors?.[timeItemIdx].endAt[0]">
               <div
                 v-if="$v.time.$each.$response.$errors[timeItemIdx].endAt.required?.$invalid"
@@ -39,32 +36,26 @@
                 Hora de inicio debe ser menor a la hora de fin
               </div>
             </template>
-          </div>
+          </u-form-group>
         </div>
         <div class="mt-1">
-          <ui-button
+          <u-button
             v-if="timeItemIdx === 0"
-            circle
             size="sm"
-            variant="link"
-            secondary
+            variant="ghost"
             :disabled="!active"
+            icon="i-heroicons-plus"
             @click="addTime"
-          >
-            <Icon name="ic:round-plus" />
-          </ui-button>
-          <ui-button
+          ></u-button>
+          <u-button
             v-if="timeItemIdx !== 0"
-            class="text-red-500"
-            circle
+            color="red"
             size="sm"
-            variant="link"
-            secondary
+            variant="ghost"
             :disabled="!active"
+            icon="i-heroicons-trash"
             @click="removeTime(timeItemIdx)"
-          >
-            <Icon name="ic:baseline-delete" />
-          </ui-button>
+          ></u-button>
         </div>
       </div>
     </div>
