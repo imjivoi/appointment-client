@@ -18,7 +18,11 @@ export default defineNuxtConfig({
       ],
     },
   },
+  css: ['~/app/styles/index.scss'],
   modules: ['nuxt-icon', 'nuxt-viewport', '@vueuse/nuxt', '@nuxt/ui'],
+  colorMode: {
+    preference: 'light',
+  },
   viewport: {
     breakpoints: {
       xs: 320,

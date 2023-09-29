@@ -14,6 +14,7 @@
   <!-- </NMessageProvider>
   </NConfigProvider> -->
   <NuxtLoadingIndicator />
+  <UNotifications />
 </template>
 <script setup>
 // import { NConfigProvider, NMessageProvider, esAR, dateEsAR } from 'naive-ui'

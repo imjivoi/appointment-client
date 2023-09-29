@@ -1,81 +1,172 @@
 <template>
-  <ui-card class="w-fit transition duration-300 mx-auto">
-    <ui-card-header>
-      <ui-card-title class="text-xl font-bold text-center">
+  <u-card
+    class="w-fit transition-all duration-300 mx-auto max-h-[800px] max-w-4xl sm:rounded-[30px] dark:bg-gray-950 overflow-x-hidden"
+  >
+    <!-- <template #header>
+      <h2 class="text-xl font-bold text-center">
         Agenda tu cita para
         <span>"Peluqueria blaBLA"</span>
-      </ui-card-title>
-    </ui-card-header>
-    <ui-card-content class="transition duration-300">
-      <div v-if="step === 1" class="flex justify-center flex-col sm:flex-row gap-10">
-        <div class="bg-gray-50 p-4 rounded-lg">
-          <h4 class="text-center mb-4 font-bold">Eligi fecha</h4>
-          <ui-calendar v-model="selectedDate" class="rounded-md" />
+      </h2>
+    </template> -->
+    <div ref="parentRef" class="flex gap-16">
+      <div class="flex flex-col justify-between gap-6 min-h-[600px] sm:w-[60%]">
+        <div v-if="step === 1" ref="calendarRef">
+          <calendar v-model="selectedDate" :min="new Date()" />
         </div>
-        <div class="bg-gray-50 p-4 flex-1 rounded-lg flex flex-col gap-4">
-          <h4 class="text-center mb-4 font-bold">Tiempo disponible</h4>
-          <ui-scroll-area class="h-52">
-            <div class="flex flex-wrap gap-2">
-              <appointment-time-slot-item
-                v-for="(timeSlot, idx) in enabledTimeSlots"
-                :key="idx"
-                :active="selectedTimeSlot?.id === timeSlot.id"
-                @click="selectedTimeSlot = timeSlot"
+        <div v-else-if="step === 2" ref="timeSlotsRef">
+          <div class="mb-4">
+            <u-button icon="i-heroicons-arrow-left" variant="ghost" size="lg" @click="step--"></u-button>
+          </div>
+          <div class="flex flex-wrap gap-4 max-h-[400px]">
+            <appointment-time-slot-item
+              v-for="(timeSlot, idx) in enabledTimeSlots"
+              :key="idx"
+              :active="selectedTimeSlot === timeSlot"
+              @click="selectedTimeSlot = timeSlot"
+            >
+              {{ timeSlot }}
+            </appointment-time-slot-item>
+          </div>
+        </div>
+        <div v-else-if="step === 3" class="h-full">
+          <div class="mb-4">
+            <u-button icon="i-heroicons-arrow-left" variant="ghost" size="lg" @click="step--"></u-button>
+          </div>
+          <u-form class="flex flex-col gap-4 h-full" ref="formRef" :validate="validate" @submit.prevent>
+            <u-form-group label="Correo" name="email">
+              <u-input v-model="form.email" />
+            </u-form-group>
+            <u-form-group label="Nombre" name="firstName">
+              <u-input v-model="form.firstName" />
+            </u-form-group>
+            <u-form-group label="Apellido" name="lastName">
+              <u-input v-model="form.lastName" />
+            </u-form-group>
+            <!-- <div class="grid gap-2">
+              <u-button
+                size="xl"
+                :ui="{
+                  rounded: 'rounded-full',
+                  padding: {
+                    xl: 'px-10',
+                  },
+                }"
+                block
+                type="submit"
               >
-                {{ timeSlot.time }}
-              </appointment-time-slot-item>
-            </div>
-          </ui-scroll-area>
-          <div class="mt-auto text-right">
-            <ui-button :disabled="!selectedDate || !selectedTimeSlot" @click="step = 2" class="w-full sm:w-auto">
-              Seguir
-            </ui-button>
+                Agendar
+              </u-button>
+            </div> -->
+          </u-form>
+        </div>
+        <u-button
+          v-if="step !== 3"
+          size="xl"
+          :ui="{
+            rounded: 'rounded-full',
+            padding: {
+              xl: 'px-10',
+            },
+          }"
+          block
+          @click="step++"
+        >
+          Seguir
+        </u-button>
+        <u-button
+          v-else
+          size="xl"
+          :ui="{
+            rounded: 'rounded-full',
+            padding: {
+              xl: 'px-10',
+            },
+          }"
+          block
+          @click="submit"
+        >
+          Agendar
+        </u-button>
+      </div>
+      <div class="sm:min-w-[300px] flex-1">
+        <h2 class="text-xl font-bold text-center">
+          Agenda tu cita para
+          <span>"Peluqueria blaBLA"</span>
+        </h2>
+
+        <div class="grid gap-2 mt-10 bg-gray-100 dark:bg-gray-900 p-4 rounded-2xl">
+          <div>
+            <span class="text-gray-400 font-medium">Fecha:</span>
+            &nbsp;
+            <span class="text-md font-bold">{{ selectedDate ? formatDate(selectedDate, 'dd MMMM yyyy') : '-' }}</span>
+          </div>
+          <div>
+            <span class="text-gray-400 font-medium">Hora:</span>
+            &nbsp;
+            <span class="text-md font-bold">{{ transformedDate ? formatDate(transformedDate, 'hh:mm') : '-' }}</span>
           </div>
         </div>
       </div>
-      <div v-else class="max-w-sm">
-        <form class="grid gap-6" @submit.prevent>
-          <div>
-            <ui-label>Correo</ui-label>
-            <ui-input v-model="form.email" />
-            <template v-if="$v.email.$error">
-              <div v-if="$v.email.required?.$invalid" class="text-red-500 mt-1">Por favor ingresa tu correo</div>
-              <div v-else-if="$v.email.email?.$invalid" class="text-red-500 mt-1">Por favor un correo valido</div>
-            </template>
-          </div>
-          <div>
-            <ui-label>Nombre</ui-label>
-            <ui-input v-model="form.firstName" />
-            <template v-if="$v.firstName.$error">
-              <div v-if="$v.firstName.required?.$invalid" class="text-red-500 mt-1">Por favor ingresa tu nombre</div>
-              <div v-else-if="$v.firstName.minLength?.$invalid" class="text-red-500 mt-1">
-                Nombre debe contener al menos 3 digitos
-              </div>
-            </template>
-          </div>
-          <div>
-            <ui-label>Apellido</ui-label>
-            <ui-input v-model="form.lastName" />
-            <template v-if="$v.lastName.$error">
-              <div v-if="$v.lastName.required?.$invalid" class="text-red-500 mt-1">Por favor ingresa tu apellido</div>
-              <div v-else-if="$v.lastName.minLength?.$invalid" class="text-red-500 mt-1">
-                Apellido debe contener al menos 3 digitos
-              </div>
-            </template>
-          </div>
-          <div class="grid gap-2">
-            <ui-button block @click="validate">Agendar</ui-button>
-            <ui-button block variant="outline" @click="step = 1">Atras</ui-button>
-          </div>
-        </form>
-      </div>
-    </ui-card-content>
-  </ui-card>
+    </div>
+  </u-card>
 </template>
 <script lang="ts" setup>
-import { useCreateAppointment } from '../composables/useCreateAppointment'
+// import { usePreferredReducedMotion } from '@vueuse/core'
 
-const { $v, form, selectedDate, selectedTimeSlot, enabledTimeSlots, validate } = useCreateAppointment()
+// import { useAnimateHeight } from '../composables/useAnimateHeight'
+import { useCreateAppointment } from '../composables/useCreateAppointment'
+// import { easeInOutQuad, easeOutQuart } from '../utils/ease-functions'
+
+const { $v, form, selectedDate, selectedTimeSlot, enabledTimeSlots, validate, transformedDate } = useCreateAppointment()
+
+const toast = useToast()
 
 const step = ref(1)
+const formRef = ref()
+const isLoading = ref(false)
+const isSuccess = ref(false)
+
+async function submit() {
+  try {
+    await formRef.value.validate()
+    // isLoading.value = true
+  } catch (error) {}
+}
+
+// const parentRef = ref() as unknown as HTMLFormElement
+// const calendarRef = ref() as unknown as HTMLFormElement
+// const timeSlotsRef = ref() as unknown as HTMLFormElement
+
+// const animateHeight = useAnimateHeight({ parentRef })
+
+// let changePageTimeout = undefined as unknown as ReturnType<typeof setTimeout>
+
+// const preferredMotion = usePreferredReducedMotion()
+// const shouldReduceMotion = preferredMotion.value === 'reduce'
+
+// onMounted(() => {
+//   if (shouldReduceMotion) {
+//     parentRef.value.style.height = `${calendarRef.value.offsetHeight + 80}px`
+//     return
+//   }
+//   // Slightly slower animation at page init, with a different easing function
+//   animateHeight({ duration: 450, easeFn: easeInOutQuad, childRef: calendarRef })
+// })
+
+// watch(step, () => {
+//   const childRef = step === 1 ? calendarRef : timeSlotsRef
+//   if (shouldReduceMotion) {
+//     setTimeout(() => {
+//       parentRef.value.style.height = `${childRef.value.offsetHeight + 80}px`
+//     })
+//     return
+//   }
+//   clearTimeout(changePageTimeout)
+//   changePageTimeout = setTimeout(() => {
+//     // 350 -> Arbitrary value...
+//     // In theory we should put the same duration as the CSS transform transition (0.3s)
+//     // but visually it seems better to give a slightly longer duration here
+//     animateHeight({ duration: 350, easeFn: easeOutQuart, childRef })
+//   }, 0)
+// })
 </script>

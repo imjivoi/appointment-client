@@ -14,19 +14,6 @@
           <u-button color="gray" variant="link" icon="i-heroicons-magnifying-glass" :padded="false"></u-button>
         </template>
       </u-input>
-      <client-only>
-        <ui-popover>
-          <ui-popover-trigger>
-            <u-button :variant="'outline'" :class="cn('justify-start text-left font-normal w-[150px]')">
-              <CalendarIcon class="mr-2 h-4 w-4" />
-              <span>{{ date ? formatDate(date, 'PP') : 'Pick a date' }}</span>
-            </u-button>
-          </ui-popover-trigger>
-          <ui-popover-content class="w-auto p-0">
-            <ui-calendar v-model="date" />
-          </ui-popover-content>
-        </ui-popover>
-      </client-only>
       <u-button
         :ui="{
           rounded: 'rounded-full',

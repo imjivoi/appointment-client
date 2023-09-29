@@ -1,9 +1,9 @@
 <template>
   <button
-    class="py-4 font-medium px-8 transition-all rounded-md"
+    class="flex items-center justify-center font-medium transition-all rounded-md w-20 h-10"
     :class="{
-      'bg-primary text-white shadow-[0_0_0_3px] shadow-secondary': active,
-      'hover:bg-white': !active,
+      'bg-primary dark:text-gray shadow-[0_0_0_3px] shadow-primary': active,
+      'hover:bg-white dark:hover:bg-gray-800': !active,
     }"
   >
     <slot />

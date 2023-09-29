@@ -2,7 +2,7 @@
   <div class="flex bg-gray-950">
     <app-sidebar />
     <main class="flex-1 bg-gray-800">
-      <div class="container px-10 lg:max-w-5xl py-16 mx-auto">
+      <div class="container px-10 py-16 mx-auto">
         <slot />
       </div>
     </main>
