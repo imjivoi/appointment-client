@@ -1,17 +1,17 @@
 <template>
-  <aside class="min-h-screen w-[230px] px-8 py-4 flex flex-col justify-between">
+  <aside class="min-h-screen w-[230px] px-8 py-4 flex flex-col justify-between bg-gray-200 dark:bg-transparent">
     <div class="mt-[30vh] w-full">
       <UVerticalNavigation
         :links="links"
         :ui="{
           wrapper: 'flex flex-col gap-2',
           base: 'transition-all',
-          rounded: 'dark:before:rounded-full',
-          active: 'dark:before:bg-gray-800',
+          rounded: 'before:rounded-full',
+          active: 'before:bg-gray-100 dark:before:bg-gray-800',
           inactive: 'hover:dark:before:bg-gray-800',
           padding: 'py-4 px-8',
           icon: {
-            active: 'dark:text-primary ',
+            active: 'text-primary ',
           },
         }"
       />

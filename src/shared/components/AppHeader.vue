@@ -15,7 +15,19 @@
         </ul>
       </div> -->
       <div>
-        <u-button :as="defineNuxtLink({})" to="/auth/login">Ingresar</u-button>
+        <u-button
+          size="md"
+          :as="defineNuxtLink({})"
+          :ui="{
+            rounded: 'rounded-full',
+            padding: {
+              md: 'px-8',
+            },
+          }"
+          to="/auth/login"
+        >
+          Ingresar
+        </u-button>
       </div>
     </div>
   </header>

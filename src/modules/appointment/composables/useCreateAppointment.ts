@@ -109,6 +109,17 @@ export function useCreateAppointment() {
     }))
   }
 
+  function reset() {
+    form.value = {
+      email: '',
+      firstName: '',
+      lastName: '',
+    }
+    selectedDate.value = undefined
+    selectedTimeSlot.value = ''
+    selectedService.value = null
+  }
+
   return {
     form,
     selectedDate,
@@ -118,5 +129,6 @@ export function useCreateAppointment() {
     validate,
     selectedService,
     transformedDate,
+    resetForm: reset,
   }
 }

@@ -12,8 +12,13 @@
       <calendar-weekdays />
     </div>
 
-    <div class="grid grid-cols-7 bg-gray-100 dark:bg-gray-900 rounded-[30px]">
-      <calendar-month-day-item v-for="day in days" :key="day.date" v-bind="day" @click="setSelected(day.date)" />
+    <div class="grid grid-cols-7 bg-gray-100 dark:bg-gray-900 rounded-[20px] overflow-hidden">
+      <calendar-month-day-item
+        v-for="day in days"
+        :key="day.date.getTime()"
+        v-bind="day"
+        @click="setSelected(day.date)"
+      />
     </div>
   </div>
 </template>
@@ -43,7 +48,7 @@ const props = defineProps<{
 }>()
 
 const selectedDate = defineModel<Date>()
-const currentDate = ref(startOfDay(new Date()))
+const currentDate = ref(selectedDate.value || startOfDay(new Date()))
 
 const today = computed(() => startOfDay(new Date()))
 const days = computed(() => {

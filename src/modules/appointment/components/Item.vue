@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col sm:flex-row flex-wrap gap-8 py-4 px-8 rounded-xl bg-gray-900">
+  <div class="flex flex-col sm:flex-row flex-wrap gap-8 py-4 px-8 rounded-xl bg-gray-100 dark:bg-gray-900">
     <div>
       <div class="mb-2 font-bold truncate max-w-[150px]">{{ fullName }}</div>
       <div>{{ email }}</div>
