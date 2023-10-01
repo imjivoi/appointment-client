@@ -1,6 +1,6 @@
 <template>
   <button
-    class="cursor-pointer max-h-20 max-w-20 p-4 rounded-[18px] transition-all"
+    class="cursor-pointer max-h-20 max-w-20 p-2 sm:p-4 rounded-[18px] transition-all"
     :disabled="isDisabled"
     :class="{
       'bg-primary-500 text-gray-100': isSelected,

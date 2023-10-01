@@ -37,7 +37,7 @@ function selectNext() {
 </script>
 <style scoped lang="postcss">
 .button {
-  @apply rounded-2xl bg-gray-100 dark:bg-gray-900 font-medium p-6 flex items-center justify-center transition-all;
+  @apply rounded-2xl bg-gray-100 dark:bg-gray-900 font-medium p-4 sm:p-6 flex items-center justify-center transition-all;
   &:hover {
     @apply bg-gray-100/[0.6] dark:bg-gray-900/[0.6];
   }

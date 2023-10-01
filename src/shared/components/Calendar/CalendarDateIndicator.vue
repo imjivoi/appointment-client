@@ -1,5 +1,5 @@
 <template>
-  <div class="dark:text-white font-bold text-lg w-48">{{ selectedMonth }} {{ selectedYear }}</div>
+  <div class="dark:text-white font-bold sm:text-lg w-32 sm:w-48">{{ selectedMonth }} {{ selectedYear }}</div>
 </template>
 <script setup lang="ts">
 import { format } from 'date-fns/esm'

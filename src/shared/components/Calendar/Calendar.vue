@@ -1,5 +1,5 @@
 <template>
-  <div class="w-max max-w-4xl">
+  <div class="md:w-max max-w-4xl">
     <div class="flex gap-8 items-center justify-between mb-8">
       <calendar-date-indicator :selected-date="currentDate" />
       <calendar-date-selector
@@ -63,7 +63,7 @@ const days = computed(() => {
   }).map((date) => {
     return {
       isDisabled: isDisabled(date),
-      isCurrent: compareAsc(currentDate.value, date) === 0,
+      // isCurrent: compareAsc(currentDate.value, date) === 0,
       isCurrentMonth: date.getMonth() === currentDate.value.getMonth(),
       isToday: date.getTime() === new Date(today.value).getTime(),
       isSelected: selectedDate.value?.getTime() === new Date(date).getTime(),

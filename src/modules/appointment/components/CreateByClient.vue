@@ -1,6 +1,6 @@
 <template>
   <u-card
-    class="w-fit transition-all duration-300 mx-auto max-h-[800px] max-w-4xl sm:rounded-[30px] dark:bg-gray-950 overflow-x-hidden"
+    class="w-fit transition-all duration-300 mx-auto md:max-h-[800px] max-w-4xl sm:rounded-[30px] dark:bg-gray-950 overflow-x-hidden"
   >
     <!-- <template #header>
       <h2 class="text-xl font-bold text-center">
@@ -55,8 +55,8 @@
         </u-button>
       </div>
     </div>
-    <div v-else ref="parentRef" class="flex gap-16">
-      <div class="flex flex-col justify-between gap-6 min-h-[550px] sm:w-[60%]">
+    <div v-else ref="parentRef" class="flex flex-col-reverse md:flex-row gap-8 sm:gap-16">
+      <div class="flex flex-col justify-between gap-6 md:min-h-[550px] md:w-[60%]">
         <div v-if="step === 1" ref="calendarRef">
           <calendar v-model="selectedDate" :min="startOfDay(new Date())" />
         </div>
@@ -123,6 +123,7 @@
             },
           }"
           block
+          :disabled="nextStepDiasbled"
           @click="step++"
         >
           Seguir
@@ -143,7 +144,7 @@
           Agendar
         </u-button>
       </div>
-      <div class="sm:min-w-[300px] flex-1">
+      <div class="md:min-w-[300px] flex-1">
         <h2 class="text-xl font-bold text-center">
           Agenda tu cita para
           <span>"Peluqueria blaBLA"</span>
@@ -180,6 +181,10 @@ const step = ref(1)
 const formRef = ref()
 const isLoading = ref(false)
 const isSuccess = ref(false)
+
+const nextStepDiasbled = computed(() => {
+  return (step.value === 1 && !selectedDate.value) || (step.value === 2 && !selectedTimeSlot.value)
+})
 
 async function submit() {
   try {
