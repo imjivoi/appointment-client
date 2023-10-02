@@ -15,17 +15,21 @@
         </span>
       </div>
       <h2 class="text-xl font-bold text-center">
-        Exitosamente agendaste tu cita para
+        Exitosamente agendaste cita para
         <span>"Peluqueria blaBLA"</span>
       </h2>
 
       <div class="grid gap-4 mt-10 bg-gray-100 dark:bg-gray-900 p-4 rounded-2xl">
         <div class="flex items-center gap-2">
-          <Icon size="30" class="text-primary" name="heroicons:calendar"></Icon>
+          <Icon size="30" class="text-primary" name="heroicons:wrench-screwdriver-solid" />
+          <span class="text-lg font-bold">{{ selectedServiceLabel ?? '-' }}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <Icon size="30" class="text-primary" name="heroicons:calendar-days-solid"></Icon>
           <span class="text-lg font-bold">{{ selectedDate ? formatDate(selectedDate, 'dd MMMM yyyy') : '-' }}</span>
         </div>
         <div class="flex items-center gap-2">
-          <Icon size="30" class="text-primary" name="heroicons:clock"></Icon>
+          <Icon size="30" class="text-primary" name="heroicons:clock-20-solid"></Icon>
           <span class="text-md font-bold">{{ transformedDate ? formatDate(transformedDate, 'hh:mm') : '-' }}</span>
         </div>
       </div>
@@ -57,13 +61,37 @@
     </div>
     <div v-else ref="parentRef" class="flex flex-col-reverse md:flex-row gap-8 sm:gap-16">
       <div class="flex flex-col justify-between gap-6 md:min-h-[550px] md:w-[60%]">
-        <div v-if="step === 1" ref="calendarRef">
+        <div class="mb-4 flex items-center gap-4">
+          <u-button
+            icon="i-heroicons-arrow-left"
+            variant="ghost"
+            size="lg"
+            :disabled="isLoading"
+            @click="step--"
+            v-if="step !== steps.service"
+          ></u-button>
+          <h2 class="text-xl font-bold text-center">
+            <template v-if="step === steps.service">Selecciona servicio</template>
+            <template v-if="step === steps.date">Selecciona fecha</template>
+            <template v-if="step === steps.time">Selecciona tiempo</template>
+            <template v-if="step === steps.form">Datos de usuario</template>
+          </h2>
+        </div>
+        <div v-if="step === steps.service">
+          <u-radio
+            v-for="service of services"
+            :key="service.name"
+            v-model="selectedService"
+            v-bind="service"
+            :ui="{
+              wrapper: 'mb-6',
+            }"
+          />
+        </div>
+        <div v-if="step === steps.date" ref="calendarRef">
           <calendar v-model="selectedDate" :min="startOfDay(new Date())" />
         </div>
-        <div v-else-if="step === 2" ref="timeSlotsRef">
-          <div class="mb-4">
-            <u-button icon="i-heroicons-arrow-left" variant="ghost" size="lg" @click="step--"></u-button>
-          </div>
+        <div v-else-if="step === steps.time" ref="timeSlotsRef">
           <div class="flex flex-wrap gap-4 max-h-[400px] overflow-y-auto p-2">
             <appointment-time-slot-item
               v-for="(timeSlot, idx) in enabledTimeSlots"
@@ -76,16 +104,7 @@
             </appointment-time-slot-item>
           </div>
         </div>
-        <div v-else-if="step === 3" class="h-full">
-          <div class="mb-4">
-            <u-button
-              icon="i-heroicons-arrow-left"
-              variant="ghost"
-              size="lg"
-              :disabled="isLoading"
-              @click="step--"
-            ></u-button>
-          </div>
+        <div v-else-if="step === steps.form" class="h-full">
           <u-form ref="formRef" class="flex flex-col gap-4 h-full" :validate="validate" @submit.prevent>
             <u-form-group label="Correo" name="email" size="md">
               <u-input v-model="form.email" :disabled="isLoading" />
@@ -114,7 +133,7 @@
           </u-form>
         </div>
         <u-button
-          v-if="step !== 3"
+          v-if="step !== steps.form"
           size="xl"
           :ui="{
             rounded: 'rounded-full',
@@ -123,7 +142,7 @@
             },
           }"
           block
-          :disabled="nextStepDiasbled"
+          :disabled="nextStepDisabled"
           @click="step++"
         >
           Seguir
@@ -152,11 +171,15 @@
 
         <div class="grid gap-4 mt-10 bg-gray-100 dark:bg-gray-900 p-4 rounded-2xl">
           <div class="flex items-center gap-2">
-            <Icon size="30" class="text-primary" name="heroicons:calendar"></Icon>
+            <Icon size="30" class="text-primary" name="heroicons:wrench-screwdriver-solid" />
+            <span class="text-lg font-bold">{{ selectedServiceLabel ?? '-' }}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <Icon size="30" class="text-primary" name="heroicons:calendar-days-solid"></Icon>
             <span class="text-lg font-bold">{{ selectedDate ? formatDate(selectedDate, 'dd MMMM yyyy') : '-' }}</span>
           </div>
           <div class="flex items-center gap-2">
-            <Icon size="30" class="text-primary" name="heroicons:clock"></Icon>
+            <Icon size="30" class="text-primary" name="heroicons:clock-20-solid"></Icon>
             <span class="text-md font-bold">{{ transformedDate ? formatDate(transformedDate, 'hh:mm') : '-' }}</span>
           </div>
         </div>
@@ -172,18 +195,70 @@ import { startOfDay } from 'date-fns'
 import { useCreateAppointment } from '../composables/useCreateAppointment'
 // import { easeInOutQuad, easeOutQuart } from '../utils/ease-functions'
 
-const { $v, form, selectedDate, selectedTimeSlot, enabledTimeSlots, validate, transformedDate, resetForm } =
-  useCreateAppointment()
+const steps = {
+  service: 1,
+  date: 2,
+  time: 3,
+  form: 4,
+}
+const {
+  $v,
+  form,
+  selectedDate,
+  selectedTimeSlot,
+  enabledTimeSlots,
+  validate,
+  transformedDate,
+  resetForm,
+  selectedService,
+} = useCreateAppointment()
 
 const toast = useToast()
 
-const step = ref(1)
+const step = ref(steps.service)
 const formRef = ref()
 const isLoading = ref(false)
 const isSuccess = ref(false)
 
-const nextStepDiasbled = computed(() => {
-  return (step.value === 1 && !selectedDate.value) || (step.value === 2 && !selectedTimeSlot.value)
+const services = [
+  {
+    name: 'corte de pelo',
+    value: 'corte-de-pelo',
+    label: 'Corte de pelo',
+    help: 'Duracion 30 min',
+  },
+  {
+    name: 'corte de barba',
+    value: 'corte-de-barba',
+    label: 'Corte de barba',
+    help: 'Duracion 30 min',
+  },
+  {
+    name: 'corte de pelo y barba',
+    value: 'corte-de-pelo-y-barba',
+    label: 'Corte de pelo y barba',
+    help: 'Duracion 30 min',
+  },
+]
+
+const selectedServiceLabel = computed(() => {
+  return services.find((service) => service.value === selectedService.value)?.label
+})
+
+const nextStepDisabled = computed(() => {
+  switch (step.value) {
+    case steps.service:
+      return !selectedService.value
+
+    case steps.date:
+      return !selectedDate.value
+
+    case steps.time:
+      return !selectedTimeSlot.value
+
+    default:
+      break
+  }
 })
 
 async function submit() {

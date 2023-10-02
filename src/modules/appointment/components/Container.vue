@@ -22,7 +22,7 @@
           },
         }"
         :as="defineNuxtLink({})"
-        to="/dashboard/appointments/create"
+        to="/a/blabl"
       >
         Nuevo turno
       </u-button>

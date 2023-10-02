@@ -7,10 +7,10 @@
           https://sdfsfas/asfasdfsadffffffffffffffsssssssssssssssssssssssssss
         </a>
       </div>
-      <ui-button size="sm" @click="copyLink">
+      <u-button size="sm" @click="copyLink">
         <Icon name="ic:round-content-copy" class="mr-2" />
         {{ isCopied ? 'Copiado!' : 'Copiar' }}
-      </ui-button>
+      </u-button>
     </div>
   </div>
 </template>
